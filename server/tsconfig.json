@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "es6",
+    "sourceMap": true,
+    "noEmitOnError": false,
+    "allowJs": true,
+    "outDir": "./dist",
+    // 告诉编译器到哪里去查找模块
+    "baseUrl": "./src",
+    //模块解析策略，classic和node，node为node.js模块解析机制
+    "moduleResolution": "Node"
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/upload"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

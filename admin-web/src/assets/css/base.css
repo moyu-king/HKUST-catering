@@ -1,0 +1,52 @@
+@font-face {
+  font-family: myFont1;
+  src: url(~@/assets/font/myFont1.ttf);
+}
+
+@font-face {
+  font-family: myFont2;
+  src: url(~@/assets/font/myFont2.ttf);
+}
+
+@font-face {
+  font-family: myFont3;
+  src: url(~@/assets/font/myFont3.ttf);
+}
+
+body {
+  min-width: 1200px;
+}
+
+/* 自定义 elment-ui 卡片样式 */
+.el-card,
+.el-tabs {
+  border-radius: 15px;
+}
+
+.el-tabs__nav-scroll,
+.el-tabs__header {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.el-card__body {
+  display: flex;
+}
+
+.el-card__header {
+  font-size: 24px;
+  font-family: myFont2;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.el-form,
+.el-table {
+  font-family: myFont3;
+}
+
+.el-dropdown-item-detail-price,
+.el-dropdown-item-detail-total {
+  color: #e74c3c;
+  margin-left: 10px;
+}
