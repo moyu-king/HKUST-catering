@@ -53,7 +53,7 @@
 
 <script>
 import { btnLoading, btnLoadingClose } from "@/utils/loading";
-import { login } from "@/service/request";
+import { login } from "@/service/login";
 export default {
   name: "Login",
   data() {
@@ -99,14 +99,8 @@ export default {
             password: this.ruleForm.pass,
           });
           btnLoadingClose(this.button.login, "登录");
-          if (result.data.status) {
-            localStorage.setItem("adminToken", result.data.data.token);
-            this.$notify({
-              title: "成功",
-              message: "登录成功！",
-              type: "success",
-              duration: 2000,
-            });
+          if (result) {
+            localStorage.setItem("token", result.token);
             this.$router.push("/");
           }
         } else {

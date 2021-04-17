@@ -95,7 +95,6 @@
 </template>
 
 <script>
-import { validatePass, updatePass } from "@/service/request";
 export default {
   name: "ShopPass",
   data() {

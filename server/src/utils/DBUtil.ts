@@ -6,7 +6,7 @@ class DBUtil {
             host: '127.0.0.1',//ip地址
             user: 'root',
             password: '187765',//mysql密码,
-            database: 'over_food',
+            database: 'order_food',
             charset: 'utf8mb4'
         });
     }

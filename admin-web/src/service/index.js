@@ -1,4 +1,5 @@
 import axios from "axios"
+import { Notification } from 'element-ui';
 
 export const API_BASE_URL = "http://127.0.0.1:3000"
 
@@ -13,13 +14,20 @@ export function axiosInstance(config) {
     if (token) {
       config.headers.authorization = 'Bearer ' + token
     }
-    
+
     return config
   })
 
   instance.interceptors.response.use(response => {
     if (response.data.status) {
       return response.data.data
+    } else {
+      Notification.error({
+        title: '错误',
+        message: response.data.message
+      });
+
+      return Promise.reject(false)
     }
   })
 

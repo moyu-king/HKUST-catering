@@ -2,7 +2,7 @@ import * as express from "express";
 import * as cors from "cors";
 import * as bodyParser from "body-parser";
 import * as path from "path";
-import userRouter from "./router/stuRoter";
+import userRouter from "./router/studentRouter";
 import adminRouter from "./router/adminRouter";
 
 const app = express();
