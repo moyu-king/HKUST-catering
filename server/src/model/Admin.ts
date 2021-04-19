@@ -1,9 +1,43 @@
 class Admin {
+    get phone(): string {
+        return this._phone;
+    }
+
+    set phone(value: string) {
+        this._phone = value;
+    }
     private _username: string;
     private _password: string;
-    private _phone: number;
+    private _phone: string;
     private _avatar: string;
+    private _alias: string
+    private _address: string
+    private _shop_name: string
 
+
+    get alias(): string {
+        return this._alias;
+    }
+
+    set alias(value: string) {
+        this._alias = value;
+    }
+
+    get address(): string {
+        return this._address;
+    }
+
+    set address(value: string) {
+        this._address = value;
+    }
+
+    get shop_name(): string {
+        return this._shop_name;
+    }
+
+    set shop_name(value: string) {
+        this._shop_name = value;
+    }
 
     get username(): string {
         return this._username;
@@ -19,14 +53,6 @@ class Admin {
 
     set password(value: string) {
         this._password = value;
-    }
-
-    get phone(): number {
-        return this._phone;
-    }
-
-    set phone(value: number) {
-        this._phone = value;
     }
 
     get avatar(): string {

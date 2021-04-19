@@ -3,7 +3,15 @@ class Food {
     private _food_name: string
     private _price: number
     private _image: string
-    private _status: string
+    private _type: string
+
+    get type(): string {
+        return this._type;
+    }
+
+    set type(value: string) {
+        this._type = value;
+    }
 
     get food_id(): string {
         return this._food_id;
@@ -35,14 +43,6 @@ class Food {
 
     set image(value: string) {
         this._image = value;
-    }
-
-    get status(): string {
-        return this._status;
-    }
-
-    set status(value: string) {
-        this._status = value;
     }
 }
 

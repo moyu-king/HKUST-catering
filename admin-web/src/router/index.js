@@ -103,7 +103,13 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = to.matched[0].meta.title;
-  next();
+  
+  console.log(!localStorage.getItem('token') || document.title !== '登录')
+  if (!localStorage.getItem('token') && document.title !== '登录') {
+    next('/login')
+  } else {
+    next();
+  }
 })
 
 export default router

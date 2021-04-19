@@ -14,21 +14,27 @@ export function axiosInstance(config) {
     if (token) {
       config.headers.authorization = 'Bearer ' + token
     }
-
     return config
   })
 
   instance.interceptors.response.use(response => {
-    if (response.data.status) {
-      return response.data.data
-    } else {
+    if (!response.data.status) {
       Notification.error({
         title: '错误',
         message: response.data.message
       });
-
-      return Promise.reject(false)
     }
+    return response.data
+  }, error => {
+    if (error.response.status === 401) {
+      Notification.error({
+        title: "错误",
+        message: error.response.data.message,
+        duration: 2000,
+      })
+      localStorage.removeItem('token')
+    }
+    return Promise.reject(error)
   })
 
   return instance(config)

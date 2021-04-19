@@ -94,15 +94,25 @@ export default {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           btnLoading(this.button.login);
-          let result = await login({
+
+          const res = await login({
             username: this.ruleForm.username,
             password: this.ruleForm.pass,
           });
-          btnLoadingClose(this.button.login, "登录");
-          if (result) {
-            localStorage.setItem("token", result.token);
+          
+          if (res.status) {
+            this.$notify({
+              title: "成功",
+              message: res.message,
+              type: "success",
+            });
+
+            localStorage.setItem("token", res.data.token);
             this.$router.push("/");
           }
+
+          btnLoadingClose(this.button.login, "登录");
+          console.log(this.button.login)
         } else {
           return false;
         }

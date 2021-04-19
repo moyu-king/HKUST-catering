@@ -1,9 +1,12 @@
 import LoginEnum from "../enum/LoginEnum";
+import Admin from "../model/Admin";
 
 interface AdminService {
     login(username: string, password: string): Promise<LoginEnum | string>
 
-    getAdminInfo(username: string): Promise<any>
+    getAdminInfo(username: string): Promise<Admin>
+
+    updateAdminInfo(alias: string, phone: string, address: string, shop_name: string, username: string): Promise<boolean>
 
     getAccountFlow(date: number): Promise<any>
 
@@ -11,13 +14,11 @@ interface AdminService {
 
     validatePass(username: string, password: number): Promise<any>
 
-    modifyPass(username: string, password: number): Promise<any>
+    updatePass(username: string, password: number): Promise<any>
 
     addNewFood(name: string, type: string, price: number): Promise<any>
 
     getFoodData(): Promise<any>
-
-    issueCoupon(title: string, discount: number, limit: number, expireIn: number): Promise<any>
 }
 
 export default AdminService;
