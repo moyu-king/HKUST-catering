@@ -6,15 +6,17 @@ interface AdminService {
 
     getAdminInfo(username: string): Promise<Admin>
 
-    updateAdminInfo(alias: string, phone: string, address: string, shop_name: string, username: string): Promise<boolean>
+    updateAdminInfo(admin: Admin): Promise<boolean>
+
+    updateAdminAvatar(originalname: string, destination: string, path: string, username: string): Promise<boolean>
 
     getAccountFlow(date: number): Promise<any>
 
     getUserFlow(date: number): Promise<any>
 
-    validatePass(username: string, password: number): Promise<any>
+    validatePass(username: string, password: string): Promise<boolean>
 
-    updatePass(username: string, password: number): Promise<any>
+    updatePass(username: string, password: string): Promise<boolean>
 
     addNewFood(name: string, type: string, price: number): Promise<any>
 

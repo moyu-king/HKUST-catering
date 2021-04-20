@@ -1,7 +1,10 @@
 import * as express from "express";
 import AdminController from "../Controller/AdminController";
 import Auth from "../filter/Auth";
+import * as multer from "multer";
+import ConstantUtil from "../utils/ConstantUtil";
 
+const avatarUpload = multer({dest: ConstantUtil.uploadAdminProfilePath})
 const router = express.Router();
 
 router.post('/HKUST/login', AdminController.adminLogin)
@@ -12,9 +15,13 @@ router.get('/HKUST/user_flow', Auth, AdminController.getUserFlow)
 
 router.get('/HKUST/admin_info', Auth, AdminController.getAdminInfo)
 
+router.put('/HKUST/admin_info', Auth, AdminController.updateAdminInfo)
+
 router.post('/HKUST/pass_validate', Auth, AdminController.validatePass)
 
-router.put('/HKUST/pass_modify', Auth, AdminController.modifyPass)
+router.put('/HKUST/pass_update', Auth, AdminController.updatePass)
+
+router.put('/HKUST/avatar_upload', Auth, avatarUpload.any(), AdminController.updateAvatar)
 
 router.post('/HKUST/coupon_issue', Auth, AdminController.issueCoupon)
 

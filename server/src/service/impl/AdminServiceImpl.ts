@@ -4,6 +4,8 @@ import AdminDaoImpl from '../../dao/impl/AdminDaoImpl'
 import LoginEnum from "../../enum/LoginEnum"
 import JWTUtil from "../../utils/JWTUtil"
 import Admin from "../../model/Admin"
+import * as fs from "fs";
+import ConstantUtil from "../../utils/ConstantUtil";
 
 class AdminServiceImpl implements AdminService {
     private adminDao: AdminDao
@@ -49,23 +51,36 @@ class AdminServiceImpl implements AdminService {
 
     }
 
-    async validatePass(username: string, password: number): Promise<any> {
-        return Promise.resolve(undefined)
+    async validatePass(username: string, password: string): Promise<boolean> {
+        try {
+            const admin: Admin = await this.adminDao.findByUsername(username)
+            return admin.password === password;
+        } catch (e) {
+            return false
+        }
+
+
     }
 
-    async updatePass(username: string, password: number): Promise<any> {
-        return Promise.resolve(undefined);
+    async updatePass(username: string, password: string): Promise<any> {
+        return await this.adminDao.updatePassByUsername(username, password).catch(() => false)
     }
 
-    async updateAdminInfo(alias: string, phone: string, address: string, shop_name: string, username: string): Promise<boolean> {
-        const admin: Admin = new Admin()
-        admin.address = address
-        admin.phone = phone
-        admin.shop_name = shop_name
-        admin.alias = alias
-        admin.username = username
+    async updateAdminInfo(admin: Admin): Promise<boolean> {
+        return await this.adminDao.updateInfoByUsername(admin).catch(() => false)
+    }
 
-        return await this.adminDao.updateInfo(admin).catch(() => false)
+    async updateAdminAvatar(originalname: string, destination: string, path: string, username: string): Promise<boolean> {
+        const oldPath: string = path
+        const newPath: string = `${destination}${originalname}`
+
+        if (fs.existsSync(oldPath)) {
+            fs.renameSync(oldPath, newPath)//如果同名文件存在，直接覆盖
+            const uploadPath: string = `${ConstantUtil.staticDir()}/HKUST/profile/${originalname}`
+            return await this.adminDao.updateAvatarByUsername(username, uploadPath).catch(() => false)
+        } else {
+            return false
+        }
     }
 
 }

@@ -38,7 +38,7 @@ class AdminDaoImpl implements AdminDao {
 
     }
 
-    updateInfo(admin: Admin): Promise<boolean> {
+    updateInfoByUsername(admin: Admin): Promise<boolean> {
         this.sql = 'update admin set shop_name = ?, alias = ?, phone = ?, address = ? where username = ?'
         this.sqlParams = [admin.shop_name, admin.alias, admin.phone, admin.address, admin.username]
 
@@ -47,7 +47,32 @@ class AdminDaoImpl implements AdminDao {
                 if (err) reject(err)
                 else resolve(true)
             })
+            this.connection.end()
+        })
+    }
 
+    updatePassByUsername(username: string, password: string): Promise<boolean> {
+        this.sql = 'update admin set password = ? where username = ?'
+        this.sqlParams = [password, username]
+
+        return new Promise((resolve, reject) => {
+            this.connection.query(this.sql, this.sqlParams, err => {
+                if (err) reject(err)
+                else resolve(true)
+            })
+            this.connection.end()
+        })
+    }
+
+    updateAvatarByUsername(username: string, uploadPath: string): Promise<boolean> {
+        this.sql = 'update admin set avatar = ? where username = ?'
+        this.sqlParams = [uploadPath, username]
+
+        return new Promise((resolve, reject) => {
+            this.connection.query(this.sql, this.sqlParams, err => {
+                if (err) reject(err)
+                else resolve(true)
+            })
             this.connection.end()
         })
     }
