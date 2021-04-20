@@ -2,7 +2,7 @@ import axios from "axios"
 import { Notification } from 'element-ui';
 import { baseLoading, baseLoadingClose } from '@/utils/loading'
 
-export const API_BASE_URL = "http://127.0.0.1:3000/HKUST"
+export const API_BASE_URL = "http://127.0.0.1:4396/HKUST"
 
 export function axiosInstance(config, isLoading = true) {
   let loading = null

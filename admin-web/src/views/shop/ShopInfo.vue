@@ -25,18 +25,19 @@
 </template>
 
 <script>
-import { getShopInfo, updateShopInfo } from "@/service/admin-info";
+import {updateAdminInfo } from "@/service/admin-info";
 
 export default {
   name: "ShopInfo",
+  inject:['admin'],
   data() {
     return {
       form: {},
     };
   },
-  async created() {
-    const res = await getShopInfo();
-    this.form = res.data;
+  mounted() {
+    const { admin } = this
+    this.form = admin
   },
   methods: {
     resetForm() {

@@ -13,15 +13,14 @@
           <div class="describe">当前头像</div>
         </div>
         <my-upload
-          v-model="show"
           method="PUT"
-          field="EvanZhao_avatar"
           img-format="png"
-          :langExt="expand"
+          v-model="show"
           :width="180"
           :height="180"
           :noRotate="false"
-          :url="serverUrl"
+          :field="field"
+          :url="uploadUrl"
           :headers="headers"
           @crop-success="cropSuccess"
           @crop-upload-success="cropUploadSuccess"
@@ -45,27 +44,23 @@ import myUpload from "vue-image-crop-upload";
 import { API_BASE_URL } from "@/service";
 
 export default {
-  name: "shopAvatar",
+  name: "ShopAvatar",
+  inject: ["admin"],
   data() {
     return {
-      serverUrl: `${API_BASE_URL}/shop/avatar`,
-      avatarTemp: "",
+      uploadUrl: `${API_BASE_URL}/avatar_upload`,
+      avatarTemp: this.admin.avatar,
       show: false,
-      expand: {
-        success: "头像修改成功",
-        fail: "500：头像修改失败，请稍后再试！",
-        error: {
-          onlyImg: "仅限图片格式jpg/png",
-          outOfSize: "单文件大小不能超过2M",
-          lowestPx: "图片最低像素为180 * 180：",
-        },
-      },
+      username: this.admin.username,
     };
   },
   components: {
     "my-upload": myUpload,
   },
   computed: {
+    field() {
+      return `${this.username}_avatar`;
+    },
     headers() {
       return { authorization: "Bearer " + localStorage.getItem("token") };
     },
@@ -80,29 +75,21 @@ export default {
     },
     //上传成功回调
     cropUploadSuccess(jsonData, field) {
-      this.$store.commit("setAvatar", this.avatarTemp);
+      this.admin.avatar = this.avatarTemp;
     },
     //上传失败回调
     cropUploadFail(status, field) {
+      console.log(status);
+      console.log(this.uploadUrl);
       if (status === 401) {
         this.$notify.error({
           title: "错误",
-          message: "401：未授权，请登录！",
+          message: "未授权，请登录！",
           duration: 2000,
         });
         this.$router.push("/login");
       }
     },
-  },
-  async mounted() {
-    // let target = document.getElementsByClassName("shopAvatar")[0];
-    // try {
-    //   let res = await getUserInfo(target);
-    //   this.avatarTemp = res.data.data.avatar;
-    //   this.username = res.data.data.username;
-    // } catch (e) {
-    //   this.$router.push("/login");
-    // }
   },
 };
 </script>
@@ -110,6 +97,10 @@ export default {
 $spacing: 50px;
 
 //plugin
+.vicp-step1 {
+  cursor: pointer;
+  user-select: none;
+}
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;

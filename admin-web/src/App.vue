@@ -7,6 +7,23 @@
 <script>
 export default {
   name: "App",
+  provide() {
+    return {
+      admin: this.admin,
+    };
+  },
+  data() {
+    return {
+      admin: {
+        avatar: "",
+        username: "",
+        phone: "",
+        alias: "",
+        address: "",
+        shop_name: "",
+      },
+    };
+  },
 };
 </script>
 

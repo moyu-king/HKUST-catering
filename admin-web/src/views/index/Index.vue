@@ -13,7 +13,7 @@
           <i class="el-icon-bell"></i>
         </el-badge>
         <el-dropdown trigger="click">
-          <el-avatar :src="avatar" :size="45"></el-avatar>
+          <el-avatar :src="admin.avatar" :size="45"></el-avatar>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>退出账号</el-dropdown-item>
           </el-dropdown-menu>
@@ -98,8 +98,10 @@
 </template>
 <script>
 // @ is an alias to /src
+import { getAdminInfo } from "@/service/admin-info";
 export default {
   name: "Index",
+  inject: ["admin"],
   data() {
     return {
       orders: [
@@ -139,9 +141,17 @@ export default {
         },
       ],
       menu_active: this.$route.path,
-      avatar:
-        "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
     };
+  },
+  async mounted() {
+    const { admin } = this;
+    const res = await getAdminInfo();
+    admin.username = res.data.username
+    admin.phone = res.data.phone
+    admin.avatar = res.data.avatar
+    admin.alias = res.data.alias
+    admin.address = res.data.address
+    admin.shop_name = res.data.shop_name
   },
   methods: {
     warningMsg() {

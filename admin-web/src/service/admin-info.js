@@ -1,13 +1,13 @@
 import { axiosInstance } from './index'
 
-export async function getShopInfo() {
+export async function getAdminInfo() {
   return axiosInstance({
     method: 'get',
     url: '/admin_info',
   })
 }
 
-export function updateShopInfo(data) {
+export function updateAdminInfo(data) {
   return axiosInstance({
     method: 'put',
     url: '/admin_info',
