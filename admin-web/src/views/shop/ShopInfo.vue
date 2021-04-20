@@ -4,7 +4,7 @@
       <div slot="header">店铺基础信息</div>
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="店铺名：">
-          <el-input v-model="form.name" disabled></el-input>
+          <el-input v-model="form.shop_name"></el-input>
         </el-form-item>
         <el-form-item label="客服昵称：" prop="alias">
           <el-input v-model="form.alias"></el-input>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { getShopInfo } from "@/service/shop-info";
+import { getShopInfo, updateShopInfo } from "@/service/admin-info";
 
 export default {
   name: "ShopInfo",
@@ -35,8 +35,8 @@ export default {
     };
   },
   async created() {
-    this.form = await getShopInfo();
-    console.log(this.form);
+    const res = await getShopInfo();
+    this.form = res.data;
   },
   methods: {
     resetForm() {

@@ -1,2 +1,2 @@
-import './shop-info'
+// import './shop-info'
 import './search-order'

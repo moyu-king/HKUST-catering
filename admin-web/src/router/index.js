@@ -12,7 +12,6 @@ const ShopPass = () => import("@/views/shop/ShopPass.vue");
 const ShopAvatar = () => import("@/views/shop/ShopAvatar.vue");
 const AddFood = () => import("@/views/food/AddFood.vue");
 const PutFood = () => import("@/views/food/PutFood.vue");
-const UserMessage = () => import("@/views/message/UserMessage.vue");
 const Discount = () => import("@/views/discount/Discount.vue");
 
 Vue.use(VueRouter)
@@ -75,11 +74,6 @@ const routes = [
         component: PutFood
       },
       {
-        path: "/message",
-        name: "UserMessage",
-        component: UserMessage
-      },
-      {
         path: "/discount",
         name: "Discount",
         component: Discount
@@ -104,7 +98,6 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   document.title = to.matched[0].meta.title;
   
-  console.log(!localStorage.getItem('token') || document.title !== '登录')
   if (!localStorage.getItem('token') && document.title !== '登录') {
     next('/login')
   } else {

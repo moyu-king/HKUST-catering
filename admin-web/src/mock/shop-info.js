@@ -1,7 +1,7 @@
 import { mock } from 'mockjs'
 import { API_BASE_URL } from '@/service'
 
-mock(API_BASE_URL + '/shop_info', () => ({
+mock(API_BASE_URL + '/admin_info', () => ({
   status: 1,
   message: 'ok',
   data: {

@@ -79,10 +79,10 @@
             <el-menu-item index="/shop/pass">修改密码</el-menu-item>
             <el-menu-item index="/shop/avatar">修改头像</el-menu-item>
           </el-submenu>
-          <el-menu-item index="/message">
+          <el-menu-item @click="warningMsg">
             <template>
               <i class="el-icon-message"></i>
-              <el-badge :value="1" :max="99">消息留言</el-badge>
+              <el-badge :value="0" :max="99" hidden>消息留言</el-badge>
             </template>
           </el-menu-item>
         </el-menu>
@@ -143,7 +143,14 @@ export default {
         "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
     };
   },
-  methods: {},
+  methods: {
+    warningMsg() {
+      this.$message({
+        message: "功能尚未开放，敬请期待！",
+        type: "warning",
+      });
+    },
+  },
 };
 </script>
 

@@ -84,17 +84,17 @@
     >
       <span
         ><i class="el-icon-info" style="color: #67c23a"></i
-        >&nbsp;密码修改成功！是否前往登录界面？</span
+        >&nbsp;密码修改成功！点击<strong>『确定』</strong>前往登录页。</span
       >
       <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="jump">确 定</el-button>
+        <el-button type="primary" @click="jumpToLogin">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { validatePass, updatePass } from "@/service/admin-info";
 export default {
   name: "ShopPass",
   data() {
@@ -151,16 +151,9 @@ export default {
     modifyPass(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          let password = this.newForm.newPass;
-          let res = await updatePass({ password });
-          if (res.data.status) {
-            this.$notify({
-              title: "成功",
-              message: res.data.msg,
-              type: "success",
-              duration: 2000,
-            });
-            this.$store.commit("delToken");
+          const res = await updatePass({ password: this.newForm.newPass });
+          if (res.status) {
+            localStorage.removeItem("token");
             this.centerDialogVisible = true;
           }
         } else {
@@ -171,25 +164,20 @@ export default {
     nextStep(formName) {
       this.$refs[formName].validateField("oldPass", async (error) => {
         if (!error) {
-          let oldPass = this.oldForm.oldPass;
-          this.active = true;
-          // try {
-          //   let result = await validatePass({ password: oldPass });
-          //   if (result.data.status) this.active = true;
-          // } catch (e) {
-          //   new Error();
-          // }
+          const result = await validatePass({
+            password: this.oldForm.oldPass,
+          });
+          if (result.status) {
+            this.active = true;
+          }
         } else {
           return false;
         }
       });
     },
-    jump() {
+    jumpToLogin() {
       this.centerDialogVisible = false;
       this.$router.push("/login");
-    },
-    cancel() {
-      this.centerDialogVisible = false;
     },
   },
 };

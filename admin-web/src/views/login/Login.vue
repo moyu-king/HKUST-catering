@@ -112,7 +112,6 @@ export default {
           }
 
           btnLoadingClose(this.button.login, "登录");
-          console.log(this.button.login)
         } else {
           return false;
         }
