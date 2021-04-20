@@ -23,7 +23,19 @@ class AdminServiceImpl implements AdminService {
     }
 
     async getAdminInfo(username: string): Promise<Admin> {
-        return await this.adminDao.findByUsername(username).catch(() => null)
+        try {
+            const admin: Admin = await this.adminDao.findByUsername(username)
+            if (admin.avatar) {
+                return admin
+            } else {
+                //如果头像为空，返回默认头像
+                admin.avatar = `${ConstantUtil.staticDir()}/HKUST/profile/default.png`
+                return admin
+            }
+        } catch (e) {
+            return null
+        }
+
     }
 
     async getFoodData(): Promise<any> {
@@ -58,8 +70,6 @@ class AdminServiceImpl implements AdminService {
         } catch (e) {
             return false
         }
-
-
     }
 
     async updatePass(username: string, password: string): Promise<any> {
@@ -72,7 +82,7 @@ class AdminServiceImpl implements AdminService {
 
     async updateAdminAvatar(originalname: string, destination: string, path: string, username: string): Promise<boolean> {
         const oldPath: string = path
-        const newPath: string = `${destination}${originalname}`
+        const newPath: string = `${destination}/${originalname}`
 
         if (fs.existsSync(oldPath)) {
             fs.renameSync(oldPath, newPath)//如果同名文件存在，直接覆盖

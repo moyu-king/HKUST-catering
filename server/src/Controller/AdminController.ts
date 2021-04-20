@@ -60,7 +60,9 @@ class AdminController {
                 shop_name: admin.shop_name,
                 alias: admin.alias,
                 phone: admin.phone,
-                address: admin.address
+                address: admin.address,
+                username: admin.username,
+                avatar: admin.avatar
             }))
         } else {
             res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, null))

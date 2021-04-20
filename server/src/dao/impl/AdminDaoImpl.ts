@@ -12,7 +12,6 @@ class AdminDaoImpl implements AdminDao {
         this.connection.connect()
     }
 
-
     findByUsername(username: string): Promise<Admin> {
         this.sql = 'select * from admin where username = ?'
         this.sqlParams = [username]
