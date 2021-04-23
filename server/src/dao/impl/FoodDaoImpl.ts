@@ -13,8 +13,8 @@ class FoodDaoImpl implements FoodDao {
     }
 
     addFood(food: Food): Promise<boolean> {
-        this.sql = 'insert into food(food_id, food_name, price, image, type) values (?, ?)'
-        this.sqlParams = [food.food_id, food.food_name, food.price, food.image, food.type]
+        this.sql = 'insert into food(food_id, food_name, price, type, description, image) values (?, ?, ?, ?, ?, ?)'
+        this.sqlParams = [food.food_id, food.food_name, food.price, food.type, food.description, food.image]
 
         return new Promise((resolve, reject) => {
             this.connection.query(this.sql, this.sqlParams, err => {
@@ -47,7 +47,6 @@ class FoodDaoImpl implements FoodDao {
     updateFoodMenuNum(number: number): Promise<boolean> {
         return Promise.resolve(false);
     }
-
 }
 
 export default FoodDaoImpl

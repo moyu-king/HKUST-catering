@@ -85,7 +85,7 @@ class AdminServiceImpl implements AdminService {
         const newPath: string = `${destination}/${originalname}`
 
         if (fs.existsSync(oldPath)) {
-            fs.renameSync(oldPath, newPath)//如果同名文件存在，直接覆盖
+            fs.renameSync(oldPath, newPath)//注意：如果与newPath同名文件存在，直接覆盖
             const uploadPath: string = `${ConstantUtil.staticDir()}/HKUST/profile/${originalname}`
             return await this.adminDao.updateAvatarByUsername(username, uploadPath).catch(() => false)
         } else {

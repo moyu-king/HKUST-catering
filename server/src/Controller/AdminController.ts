@@ -140,21 +140,20 @@ class AdminController {
         } else {
             res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, null))
         }
-
     }
 
     public static async addNewFood(req: any, res: any): Promise<void> {
-        const {food_name, price, type} = req.body
+        const {food_name, price, type, description} = req.body
+        const {destination, path, filename} = req.files[0]
         const foodService: FoodService = new FoodServiceImpl()
-        const result: boolean = await foodService.addFood(food_name, price, type)
+        const result: boolean = await foodService.addFood(food_name, price, type, description, destination, path, filename)
 
         if (result) {
-            res.send(HttpUtil.resBody(1, '菜式添加成功！', null))
+            res.send(HttpUtil.resBody(1, 'ok', null))
         } else {
             res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, null))
         }
     }
-
 }
 
 export default AdminController;

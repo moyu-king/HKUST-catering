@@ -7,7 +7,7 @@ interface AdminDao {
 
     updatePassByUsername(username: string, password: string): Promise<boolean>
 
-    updateAvatarByUsername(username:string,uploadPath:string):Promise<boolean>
+    updateAvatarByUsername(username: string, uploadPath: string): Promise<boolean>
 }
 
 export default AdminDao;

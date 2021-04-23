@@ -11,7 +11,6 @@ const app = express();
 //引入cors，解决跨域问题
 app.use(cors());
 
-console.log(path.join(__dirname, './upload'));
 //开放静态资源
 app.use('/static/', express.static(path.join(__dirname, './upload/')));
 

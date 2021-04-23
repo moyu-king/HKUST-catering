@@ -4,9 +4,9 @@
       <span>添加新菜式</span>
     </div>
     <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-      <el-form-item prop="name" label="菜名：">
+      <el-form-item prop="food_name" label="菜名：">
         <el-input
-          v-model="form.name"
+          v-model="form.food_name"
           placeholder="菜名"
           maxlength="10"
           show-word-limit
@@ -35,7 +35,7 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addFoodMenu('form')">添 加</el-button>
+        <el-button type="primary" @click="onSubmit">添 加</el-button>
         <el-button type="warning" @click="resetForm('form', 'upload')"
           >清 空</el-button
         >
@@ -49,20 +49,27 @@
       <el-upload
         ref="upload"
         list-type="picture-card"
+        :limit="1"
+        :auto-upload="false"
+        :headers="headers"
         :action="uploadServer"
         :file-list="fileList"
-        :auto-upload="false"
-        :limit="3"
+        :http-request="addFoodMenu"
         :on-exceed="handleExceed"
+        :on-change="handleChange"
+        :on-remove="handleRemove"
       >
         <i class="el-icon-plus"></i>
       </el-upload>
-      <div class="tip">图片大小640*640极佳，最多上传3张图片</div>
+      <div class="tip">图片大小640*640极佳，目前最多上传1张图片</div>
     </div>
   </el-card>
 </template>
 
 <script>
+import { API_BASE_URL } from "@/service";
+import { addNewFoodToMenu } from "@/service/food";
+
 export default {
   name: "AddFood",
   data() {
@@ -75,9 +82,9 @@ export default {
     };
     return {
       foodType: ["荤", "素"],
-      uploadServer: "http://127.0.0.1:3000/admin/food/upload",
+      uploadServer: `${API_BASE_URL}/foodImage_upload`,
       form: {
-        name: "",
+        food_name: "",
         type: "",
         price: "",
         description: "",
@@ -86,31 +93,77 @@ export default {
         price: [{ validator: validatePrice, trigger: "blur" }],
       },
       fileList: [],
+      fileStatus: true,
     };
   },
+  computed: {
+    headers() {
+      return { authorization: "Bearer " + localStorage.getItem("token") };
+    },
+  },
   methods: {
-    addFoodMenu(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log("验证成功！");
-        } else return false;
+    async addFoodMenu(param) {
+      const formData = new FormData();
+
+      formData.append("file", param.file);
+      Object.entries(this.form).forEach((field) => {
+        formData.append(field[0], field[1]);
+      });
+
+      const res = await addNewFoodToMenu(formData);
+
+      if (res.status) {
+        this.$notify({
+          title: "成功",
+          message: "菜式信息已添加",
+          type: "success",
+        });
+      }
+    },
+    onSubmit() {
+      this.$refs["form"].validate((valid) => {
+        if (valid && this.fileList.length) {
+          if (!this.fileStatus) {
+            this.$message.error("上传之前请先处理好错误的图片格式！");
+          } else {
+            this.$refs["upload"].submit();
+          }
+        } else {
+          this.$message.error("请认真填写好菜式信息！");
+          return false;
+        }
       });
     },
     resetForm(formName, uploadName) {
       this.$refs[formName].resetFields();
       this.$refs[uploadName].clearFiles();
-      this.$message({
-        type: "success",
-        message: "表单已清空！",
-        showClose: true,
-      });
     },
     handleExceed() {
       this.$message({
         type: "warning",
-        message: "最多上传3张图片",
+        message: "抱歉，目前最多上传1张图片",
         showClose: true,
       });
+    },
+    handleChange(file, fileList) {
+      this.fileList = fileList;
+
+      const isIMAGE =
+        file.raw.type === "image/jpeg" ||
+        file.raw.type === "image/jpg" ||
+        file.raw.type === "image/png";
+      const isLt2M = file.size / 1024 / 1024 < 2; //图片需小于2M
+
+      if (!isIMAGE) {
+        this.$message.error("上传文件只能是图片格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传文件大小不能超过 2MB!");
+      }
+      this.fileStatus = isIMAGE && isLt2M;
+    },
+    handleRemove(file, fileList) {
+      this.fileList = fileList;
     },
   },
 };

@@ -31,7 +31,7 @@ export function countdownButton(btnObj, second, endTxt) {
 export function baseLoading(target) {
   const options = {
     text: '正在加载中，请耐心等待',
-    background: 'rgba(255, 255, 255, 0.7)',
+    background: 'rgba(255, 255, 255, 0.6)',
     target
   }
 

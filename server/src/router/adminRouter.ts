@@ -5,6 +5,8 @@ import * as multer from "multer";
 import ConstantUtil from "../utils/ConstantUtil";
 
 const avatarUpload = multer({dest: ConstantUtil.uploadAdminProfilePath})
+const foodImageUpload = multer({dest: ConstantUtil.uploadFoodImagePath})
+
 const router = express.Router();
 
 router.post('/HKUST/login', AdminController.adminLogin)
@@ -27,6 +29,6 @@ router.post('/HKUST/coupon_issue', Auth, AdminController.issueCoupon)
 
 router.get('/HKUST/food_menu', Auth, AdminController.getFoodData)
 
-router.post('/HKUST/new_food', Auth, AdminController.addNewFood)
+router.post('/HKUST/food_add', Auth, foodImageUpload.any(), AdminController.addNewFood)
 
 export default router;

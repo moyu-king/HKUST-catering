@@ -230,6 +230,12 @@ export default {
       height: 100%;
       position: relative;
       z-index: 9;
+      overflow: auto;
+
+      &::-webkit-scrollbar{
+        width: 0;
+      }
+
       & > .el-menu {
         height: 100%;
       }

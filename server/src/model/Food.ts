@@ -4,6 +4,15 @@ class Food {
     private _price: number
     private _image: string
     private _type: string
+    private _description:string
+
+    get description(): string {
+        return this._description;
+    }
+
+    set description(value: string) {
+        this._description = value;
+    }
 
     get type(): string {
         return this._type;

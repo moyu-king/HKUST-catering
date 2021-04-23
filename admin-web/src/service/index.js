@@ -1,6 +1,7 @@
 import axios from "axios"
 import { Notification } from 'element-ui';
 import { baseLoading, baseLoadingClose } from '@/utils/loading'
+import router from '../router'
 
 export const API_BASE_URL = "http://127.0.0.1:4396/HKUST"
 
@@ -37,15 +38,24 @@ export function axiosInstance(config, isLoading = true) {
 
     return response.data
   }, error => {
-    if (error.response.status === 401) {
-      baseLoadingClose(loading)
+    baseLoadingClose(loading)
 
+    if (error.message = 'Network Error') {
+      Notification.error({
+        title: '错误',
+        message: '网络出现了一些状况，请稍后再试！',
+        duration: 2000
+      })
+    }
+
+    if (error.response.status === 401) {
       Notification.error({
         title: "错误",
         message: error.response.data.message,
         duration: 2000,
       })
       localStorage.removeItem('token')
+      router.push('/login')
     }
 
     return Promise.reject(error)
