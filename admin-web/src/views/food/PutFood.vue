@@ -6,7 +6,7 @@
       </div>
       <el-table
         stripe
-        height="400px"
+        class="food-original-table"
         ref="foodTable"
         :data="tableData"
         @select="handleSelection"
@@ -19,11 +19,11 @@
           prop="prop"
           label="label"
         ></el-table-column>
-        <el-table-column label="菜名" prop="name"></el-table-column>
+        <el-table-column label="菜名" prop="food_name"></el-table-column>
         <el-table-column label="类型" prop="type"></el-table-column>
         <el-table-column label="价格（元）" prop="price"></el-table-column>
         <el-table-column align="right">
-          <template slot="header" slot-scope="scope">
+          <template slot="header">
             <el-input
               v-model="searchValue"
               prefix-icon="el-icon-search"
@@ -52,10 +52,12 @@
         <el-date-picker
           id="date-put"
           v-model="date"
-          type="date"
+          type="datetime"
           placeholder="选择日期"
           size="medium"
-          value-format="yyyy-MM-d"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          default-time="08:00:00"
           :clearable="false"
         >
         </el-date-picker>
@@ -72,7 +74,7 @@
       </div>
       <el-table
         stripe
-        height="400px"
+        class="food-put-table"
         :data="foodPut"
         :default-sort="{ prop: 'date', order: 'descending' }"
         @select="handleSelection"
@@ -83,7 +85,7 @@
           prop="date"
           sortable
         ></el-table-column>
-        <el-table-column label="菜名" prop="name"></el-table-column>
+        <el-table-column label="菜名" prop="food_name"></el-table-column>
         <el-table-column label="类型" prop="type"></el-table-column>
         <el-table-column label="价格（元）" prop="price"></el-table-column>
         <el-table-column label="数量" prop="number"></el-table-column>
@@ -113,7 +115,7 @@
     >
       <el-form :model="form" class="food-modify">
         <el-form-item label="菜名：" label-width="70px">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="form.food_name"></el-input>
         </el-form-item>
         <el-form-item label="价格：" label-width="70px">
           <el-input v-model="form.price" placeholder="单位：元"></el-input>
@@ -131,7 +133,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogModifyInfo.visible = false">取 消</el-button>
-        <el-button type="primary" @click="foodModifyInfo">修 改</el-button>
+        <el-button type="primary" @click="foodInfoModify">修 改</el-button>
       </div>
     </el-dialog>
     <!-- 删除 -->
@@ -204,21 +206,31 @@
       </div>
       <span>
         发现&nbsp;
-        <strong>{{ dialogDuplicate.number }}</strong>
+        <strong>{{ dialogDuplicate.duplication }}</strong>
         &nbsp;项重复项
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogDuplicate.visible = false"
           >取 消</el-button
         >
-        <el-button type="warning" @click="handleDuplicate(1)">累 加</el-button>
-        <el-button type="danger" @click="handleDuplicate(0)">覆 盖</el-button>
+        <el-button type="warning" @click="handleDuplicate(0)">累 加</el-button>
+        <el-button type="danger" @click="handleDuplicate(1)">覆 盖</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { dateFormat } from "@/utils/format";
+import { getFood, updateFoodInfo, deleteFood } from "@/service/food";
+import {
+  getFoodMenu,
+  addFoodMenu,
+  addDuplicateFoodMenu,
+  updateFoodMenuNum,
+  deleteFoodMenu,
+} from "@/service/food_menu";
+
 export default {
   name: "PutFood",
   data() {
@@ -233,17 +245,17 @@ export default {
     };
     return {
       date: "",
+      foodNum: "",
       searchValue: "",
       multipleSelection: [],
       foodTypes: ["素", "荤"],
-      foodNum: "",
-      dialogDelete: { visible: false, name: "" },
-      dialogModifyInfo: { visible: false, name: "" },
-      dialogModifyNum: { visible: false, name: "" },
-      dialogPutOff: { visible: false, name: "" },
-      dialogDuplicate: { visible: false, number: "" },
+      dialogDelete: { visible: false, name: "", food_id: "" },
+      dialogModifyInfo: { visible: false, name: "", food_id: "" },
+      dialogModifyNum: { visible: false, name: "", food_menu_id: "" },
+      dialogPutOff: { visible: false, name: "", food_menu_id: "" },
+      dialogDuplicate: { visible: false, duplication: "", sub: {} },
       form: {
-        name: "",
+        food_name: "",
         type: "",
         price: "",
       },
@@ -253,58 +265,8 @@ export default {
       modifyRules: {
         modifyNum: [{ validator: validateNum, trigger: "blur" }],
       },
-      foodOriginal: [
-        { price: 10, name: "爆炒猪肝", type: "荤" },
-        { price: 10, name: "红烧肉", type: "荤" },
-        { price: 10, name: "辣子鸡", type: "荤" },
-        { price: 10, name: "香菇滑鸡", type: "荤" },
-        { price: 10, name: "酸菜鱼", type: "荤" },
-        { price: 10, name: "麻婆豆腐", type: "荤" },
-      ],
-      foodPut: [
-        {
-          date: "2021-03-16",
-          price: 10,
-          name: "爆炒猪肝",
-          type: "荤",
-          number: 50,
-        },
-        {
-          date: "2021-03-16",
-          price: 10,
-          name: "红烧肉",
-          type: "荤",
-          number: 50,
-        },
-        {
-          date: "2021-03-16",
-          price: 10,
-          name: "辣子鸡",
-          type: "荤",
-          number: 50,
-        },
-        {
-          date: "2021-03-17",
-          price: 10,
-          name: "香菇滑鸡",
-          type: "荤",
-          number: 50,
-        },
-        {
-          date: "2021-03-17",
-          price: 10,
-          name: "酸菜鱼",
-          type: "荤",
-          number: 50,
-        },
-        {
-          date: "2021-03-17",
-          price: 10,
-          name: "麻婆豆腐",
-          type: "荤",
-          number: 50,
-        },
-      ],
+      foodOriginal: [],
+      foodPut: [],
     };
   },
   computed: {
@@ -312,7 +274,7 @@ export default {
       return this.foodOriginal.filter(
         (data) =>
           !this.searchValue ||
-          data.name.toLowerCase().includes(this.searchValue.toLowerCase())
+          data.food_name.toLowerCase().includes(this.searchValue.toLowerCase())
       );
     },
   },
@@ -325,13 +287,9 @@ export default {
       });
     },
   },
-  created() {
-    let now = new Date();
-    this.date = this.timeFormat(
-      now.getFullYear(),
-      now.getMonth() + 1,
-      now.getDate()
-    );
+  async created() {
+    this.foodOriginal = (await getFood()).data;
+    this.foodPut = (await getFoodMenu()).data;
   },
   methods: {
     handleDialogClose(formName) {
@@ -339,201 +297,229 @@ export default {
     },
     handleDelete(row) {
       this.dialogDelete.visible = true;
-      this.dialogDelete.name = row.name;
+      this.dialogDelete.food_id = row.food_id;
+      this.dialogDelete.name = row.food_name;
     },
     handlePutOff(row) {
       this.dialogPutOff.visible = true;
-      this.dialogPutOff.name = row.name;
+      this.dialogPutOff.name = row.food_name;
       this.dialogPutOff.date = row.date;
+      this.dialogPutOff.food_menu_id = row.food_menu_id;
     },
     handleEditNum(row) {
       this.dialogModifyNum.visible = true;
-      this.dialogModifyNum.name = row.name;
+      this.dialogModifyNum.name = row.food_name;
       this.dialogModifyNum.date = row.date;
+      this.dialogModifyNum.food_menu_id = row.food_menu_id;
       this.modifyForm.modifyNum = row.number;
     },
     handleEditInfo(row) {
       this.dialogModifyInfo.visible = true;
-      this.dialogModifyInfo.name = row.name;
+
+      this.dialogModifyInfo.food_id = row.food_id;
+      this.dialogModifyInfo.name = row.food_name;
       this.form.type = row.type;
       this.form.price = row.price;
-      this.form.name = row.name;
+      this.form.food_name = row.food_name;
     },
     handleSelection(val) {
       this.multipleSelection = val;
     },
-    foodDelete() {
-      this.foodOriginal = this.foodOriginal.filter(
-        (item) => item.name !== this.dialogDelete.name
-      );
-      this.dialogDelete.visible = false;
-      this.$notify({
-        title: "成功",
-        type: "success",
-        message: "菜单已删除!",
-        duration: 2000,
+    async foodDelete() {
+      //发起删除请求
+      const res = await deleteFood({
+        food_id: this.dialogDelete.food_id,
       });
+
+      if (res.status) {
+        //浏览器本地删除
+        this.foodOriginal = this.foodOriginal.filter(
+          (item) => item.food_name !== this.dialogDelete.name
+        );
+        //显示成功信息
+        this.$notify({
+          title: "成功",
+          type: "success",
+          message: "菜单已删除!",
+          duration: 2000,
+        });
+        //关闭弹出层
+        this.dialogDelete.visible = false;
+      }
     },
-    foodPutOff() {
-      this.foodPut = this.foodPut.filter(
-        (item) =>
-          !(
-            item.name === this.dialogPutOff.name &&
-            item.date === this.dialogPutOff.date
-          )
-      );
-      this.dialogPutOff.visible = false;
-      this.$notify({
-        title: "成功",
-        message: "菜单已下架！",
-        type: "success",
-        duration: 2000,
+    async foodPutOff() {
+      const res = await deleteFoodMenu({
+        food_menu_id: this.dialogPutOff.food_menu_id,
       });
+      if (res.status) {
+        this.foodPut = this.foodPut.filter(
+          (item) => item.food_menu_id !== this.dialogPutOff.food_menu_id
+        );
+        this.dialogPutOff.visible = false;
+        this.$notify({
+          title: "成功",
+          message: "菜单已下架！",
+          type: "success",
+          duration: 2000,
+        });
+      }
     },
-    foodPutOn() {
+    async foodPutOn() {
+      let date = this.date;
       if (!this.multipleSelection.length) {
         this.$notify.error({
           title: "错误",
           message: "还未添加菜单！",
           duration: 2000,
         });
-      } else if (!this.foodNum) {
+      } else if (!this.foodNum || !date) {
         this.$notify.error({
           title: "错误",
-          message: "数量不能为空",
+          message: "请认真填写必要信息！",
+          duration: 2000,
+        });
+      } else if (
+        new Date().getTime() - 24 * 60 * 60 * 1000 >
+        new Date(date).getTime()
+      ) {
+        this.$notify.error({
+          title: "错误",
+          message: "选择的日期不在有效范围之内!",
           duration: 2000,
         });
       } else {
+        date = dateFormat(date);
         let duplication = 0; //累计重复项
-        let indexArrM = []; //保存MultipleSelection中存重复项的index
-        let indexArrF = []; //保存FoodPut中重复项的index;
-        let date = this.date;
         let number = this.foodNum * 1;
-        let filterArr = this.foodPut.filter((item) => item.date === date);
 
-        this.multipleSelection.forEach((selection, i) => {
-          if (filterArr.find((item) => item.name === selection.name)) {
-            let index = this.foodPut.findIndex(
-              (item) => item.name === selection.name && item.date === date
-            );
-            duplication = duplication + 1;
-            indexArrM.push(i);
-            indexArrF.push(index);
+        this.multipleSelection.forEach((selection) => {
+          //在已上架列表找出与multipleSelection中food_id和date相同的项
+          let index = this.foodPut.findIndex(
+            (item) => item.food_id === selection.food_id && item.date === date
+          );
+          //如果找到了进行对应处理
+          if (index !== -1) {
+            duplication += 1;
           }
         });
 
-        if (!indexArrM.length) {
+        //返回food_id数组，用以提交
+        const foods_id = [];
+        this.multipleSelection.forEach((item) => {
+          foods_id.push(item.food_id);
+        });
+
+        if (!duplication) {
           //无重复项
-          this.multipleSelection.forEach((selection) => {
-            let obj = {};
-            for (let property in selection) {
-              obj[property] = selection[property];
-            }
-            obj.date = date;
-            obj.number = number;
-            this.foodPut.push(obj);
+          const res = await addFoodMenu({
+            date: new Date(this.date).getTime(),
+            number: this.foodNum,
+            foods_id,
           });
-          //put on successfully：clear input、checkbox，show success tip;
-          this.foodNum = "";
-          this.$refs["foodTable"].clearSelection();
-          this.multipleSelection = []; // reset multipleSelection
-          this.$notify({
-            title: "成功",
-            type: "success",
-            message: "上架成功！",
-            duration: 2000,
-          });
+          //数据回显
+          if (res.status) {
+            this.foodPut = (await getFoodMenu()).data;
+            //清除表单域
+            this.foodNum = "";
+            this.date = "";
+            this.$refs["foodTable"].clearSelection();
+            this.multipleSelection = [];
+            //显示成功信息
+            this.$notify({
+              title: "成功",
+              type: "success",
+              message: "上架成功！",
+              duration: 2000,
+            });
+          }
         } else {
           //存在重复项
           this.dialogDuplicate.visible = true;
-          this.dialogDuplicate.number = duplication;
+          this.dialogDuplicate.duplication = duplication;
           this.dialogDuplicate.sub = {
-            indexArrM,
-            indexArrF,
             date,
             number,
+            foods_id,
           };
         }
       }
     },
-    handleDuplicate(option) {
-      let indexArrF = this.dialogDuplicate.sub.indexArrF;
-      let indexArrM = this.dialogDuplicate.sub.indexArrM;
-      let number = this.dialogDuplicate.sub.number;
-      let date = this.dialogDuplicate.sub.date;
+    async handleDuplicate(operate) {
+      const { number, date, foods_id } = this.dialogDuplicate.sub;
 
-      //处理不重复的，添加
-      this.multipleSelection.forEach((selection, i) => {
-        if (indexArrM.indexOf(i) === -1) {
-          let obj = {};
-          for (let property in selection) {
-            obj[property] = selection[property];
-          }
-          obj.date = date;
-          obj.number = number;
-          this.foodPut.push(obj);
-        }
+      const res = await addDuplicateFoodMenu({
+        operate,
+        foods_id,
+        date: new Date(date).getTime(),
+        number,
       });
-      //处理重复的
-      if (option === 0) {
-        //0表示覆盖
-        for (let index of indexArrF) {
-          this.foodPut[index].number = number;
-        }
-      } else {
-        //累加
-        for (let index of indexArrF) {
-          this.foodPut[index].number = this.foodPut[index].number + number;
-        }
+      //数据回显
+      if (res.status) {
+        this.foodPut = (await getFoodMenu()).data;
+        //finish
+        this.foodNum = "";
+        this.date = "";
+        this.$refs["foodTable"].clearSelection();
+        this.multipleSelection = [];
+        this.dialogDuplicate.visible = false;
+        this.$notify({
+          title: "成功",
+          message: "操作已完成",
+          type: "success",
+        });
       }
-      //finish
-      this.foodNum = "";
-      this.$refs["foodTable"].clearSelection();
-      this.multipleSelection = [];
-      this.dialogDuplicate.visible = false;
-      this.$notify({
-        title: "成功",
-        message: "操作已完成",
-        type: "success",
-      });
     },
-    foodModifyInfo() {
-      this.dialogModifyInfo.visible = false;
-      this.foodOriginal.forEach((item) => {
-        if (item.name === this.dialogModifyInfo.name) {
-          item.name = this.form.name;
-          item.type = this.form.type;
-          item.price = this.form.price;
-        }
+
+    async foodInfoModify() {
+      //发情请求
+      const result = await updateFoodInfo({
+        food_id: this.dialogModifyInfo.food_id,
+        food_name: this.form.food_name,
+        type: this.form.type,
+        price: this.form.price,
       });
-      this.$notify({
-        title: "成功",
-        type: "success",
-        message: "菜单修改修改成功!",
-        duration: 2000,
-      });
+
+      if (result.status) {
+        //前端处理回显，可省去http请求
+        this.foodOriginal.forEach((item) => {
+          if (item.food_name === this.dialogModifyInfo.name) {
+            item.food_name = this.form.food_name;
+            item.type = this.form.type;
+            item.price = this.form.price;
+          }
+        });
+        //显示成功信息
+        this.$notify({
+          title: "成功",
+          type: "success",
+          message: "菜单修改修改成功!",
+          duration: 2000,
+        });
+        //关闭弹出层
+        this.dialogModifyInfo.visible = false;
+      }
     },
-    foodModifyNum() {
-      //注意：如果这里选择和"现有菜单"同款搜索框，则需另外处理
-      let number = this.modifyForm.modifyNum;
-      let index = this.foodPut.findIndex(
-        (item) =>
-          item.date === this.dialogModifyNum.date &&
-          item.name === this.dialogModifyNum.name
-      );
-      this.foodPut[index].number = number;
-      this.dialogModifyNum.visible = false;
-      this.$notify({
-        title: "成功",
-        type: "success",
-        message: "修改成功！",
-        duration: 2000,
+    async foodModifyNum() {
+      const res = await updateFoodMenuNum({
+        number: this.modifyForm.modifyNum,
+        food_menu_id: this.dialogModifyNum.food_menu_id,
       });
-    },
-    timeFormat(y, m, d) {
-      if (m < 10) m = "0" + m;
-      if (d < 10) d = "0" + d;
-      return `${y}-${m}-${d}`;
+      //本地浏览器处理回显
+      if (res.status) {
+        let number = this.modifyForm.modifyNum;
+        this.foodPut.find(
+          (food) => food.food_menu_id === this.dialogModifyNum.food_menu_id
+        ).number = number;
+
+        this.dialogModifyNum.visible = false;
+
+        this.$notify({
+          title: "成功",
+          type: "success",
+          message: "修改成功！",
+          duration: 2000,
+        });
+      }
     },
   },
 };
@@ -585,5 +571,18 @@ export default {
   .food-put {
     margin-bottom: 80px;
   }
+
+  .food-put-table,
+  .food-original-table {
+    max-height: 400px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+.el-picker-panel__footer .el-button:first-child,
+.el-date-picker__time-header {
+  display: none;
 }
 </style>

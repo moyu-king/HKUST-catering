@@ -16,7 +16,7 @@
           <el-input v-model="form.address"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">提交信息</el-button>
+          <el-button type="primary" @click="updateInfo">提交信息</el-button>
           <el-button type="warning" @click="resetForm">清 空</el-button>
         </el-form-item>
       </el-form>
@@ -25,23 +25,44 @@
 </template>
 
 <script>
-import {updateAdminInfo } from "@/service/admin-info";
+import { updateAdminInfo } from "@/service/admin-info";
 
 export default {
   name: "ShopInfo",
-  inject:['admin'],
+  inject: ["admin"],
   data() {
     return {
-      form: {},
+      form: {
+        shop_name: "",
+        phone: "",
+        address: "",
+        alias: "",
+      },
     };
   },
   mounted() {
-    const { admin } = this
-    this.form = admin
+    const { admin } = this;
+    this.form = admin;
   },
   methods: {
     resetForm() {
       this.$refs["form"].resetFields();
+    },
+    async updateInfo() {
+      const res = await updateAdminInfo({
+        shop_name: this.form.shop_name,
+        phone: this.form.phone,
+        address: this.form.address,
+        alias: this.form.alias,
+      });
+
+      if (res.status) {
+        this.$notify({
+          title: "成功",
+          message: res.message,
+          type: "success",
+        });
+      }
     },
   },
 };

@@ -26,26 +26,61 @@ class FoodDaoImpl implements FoodDao {
         })
     }
 
-    addFoodToMenu(food_id: string, number: number, date: number): Promise<boolean> {
-        this.sql = 'insert into food_menu(food_id, number, date) values (?, ?, ?)'
-        this.sqlParams = [food_id, number, date]
+    updateFood(food: Food): Promise<boolean> {
+        this.sql = "update food set food_name = ?, price = ?, type = ? where food_id = ?"
+        this.sqlParams = [food.food_name, food.price, food.type, food.food_id]
 
         return new Promise((resolve, reject) => {
             this.connection.query(this.sql, this.sqlParams, err => {
                 if (err) reject(err)
                 else resolve(true)
             })
+            this.connection.end()
+        })
+    }
+
+    queryAll(): Promise<Food[]> {
+        this.sql = 'select * from food'
+
+        return new Promise((resolve, reject) => {
+            this.connection.query(this.sql, (err, result: Food[]) => {
+                if (err) reject(err)
+                else resolve(result)
+            })
 
             this.connection.end()
         })
     }
 
-    updateFood(food: Food): Promise<boolean> {
-        return Promise.resolve(false);
+    deleteById(food_id: string): Promise<boolean> {
+        this.sql = 'delete from food where food_id = ?'
+        this.sqlParams = [food_id]
+
+        return new Promise(((resolve, reject) => {
+            this.connection.query(this.sql, this.sqlParams, err => {
+                if (err) reject(err)
+                else resolve(true)
+            })
+
+            this.connection.end()
+        }))
     }
 
-    updateFoodMenuNum(number: number): Promise<boolean> {
-        return Promise.resolve(false);
+    findById(food_id: string): Promise<Food> {
+        const connection = DBUtil.createConnection()
+        connection.connect()
+        this.sql = 'select * from food where food_id = ?'
+        this.sqlParams = [food_id]
+        return new Promise((resolve, reject) => {
+            connection.query(this.sql, this.sqlParams, (err, result: Food[]) => {
+                if (err) reject(err)
+                else if (result.length !== 0) {
+                    resolve(result[0])
+                } else {
+                    resolve(null)
+                }
+            })
+        })
     }
 }
 

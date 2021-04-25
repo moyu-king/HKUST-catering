@@ -19,8 +19,6 @@ interface AdminService {
     updatePass(username: string, password: string): Promise<boolean>
 
     addNewFood(name: string, type: string, price: number): Promise<any>
-
-    getFoodData(): Promise<any>
 }
 
 export default AdminService;

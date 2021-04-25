@@ -38,10 +38,6 @@ class AdminServiceImpl implements AdminService {
 
     }
 
-    async getFoodData(): Promise<any> {
-        return Promise.resolve(undefined)
-    }
-
     async getUserFlow(date: number): Promise<any> {
         return Promise.resolve(undefined)
     }

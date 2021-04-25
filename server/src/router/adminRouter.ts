@@ -27,8 +27,22 @@ router.put('/HKUST/avatar_upload', Auth, avatarUpload.any(), AdminController.upd
 
 router.post('/HKUST/coupon_issue', Auth, AdminController.issueCoupon)
 
-router.get('/HKUST/food_menu', Auth, AdminController.getFoodData)
+router.get('/HKUST/food', Auth, AdminController.getFood)
 
-router.post('/HKUST/food_add', Auth, foodImageUpload.any(), AdminController.addNewFood)
+router.post('/HKUST/food', Auth, foodImageUpload.any(), AdminController.addFood)
+
+router.put('/HKUST/food', Auth, AdminController.updateFood)
+
+router.delete('/HKUST/food', Auth, AdminController.deleteFood)
+
+router.get('/HKUST/food_menu', Auth, AdminController.getFoodMenu)
+
+router.post('/HKUST/food_menu', Auth, AdminController.addFoodMenu)
+
+router.put('/HKUST/food_menu', Auth, AdminController.updateFoodMenuNum)
+
+router.delete('/HKUST/food_menu', Auth, AdminController.deleteFoodMenu)
+
+router.post('/HKUST/food_menu/duplicate', Auth, AdminController.addHasDuplicateFoodMenu)
 
 export default router;

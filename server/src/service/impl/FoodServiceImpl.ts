@@ -35,11 +35,21 @@ class FoodServiceImpl implements FoodService {
     }
 
     async updateFood(food_name: string, price: number, type: string, food_id: string): Promise<boolean> {
-        return Promise.resolve(false);
+        const food: Food = new Food()
+        food.food_id = food_id
+        food.price = price
+        food.type = type
+        food.food_name = food_name
+
+        return await this.foodDao.updateFood(food).catch(() => false)
     }
 
-    async addFoodToMenu(food_id: string, number: number, date: number): Promise<boolean> {
-        return await this.foodDao.addFoodToMenu(food_id, number, date).catch(() => false)
+    async getFoodData(): Promise<Food[] | boolean> {
+        return this.foodDao.queryAll().catch(() => false)
+    }
+
+    async deleteFood(food_id: string): Promise<boolean> {
+        return await this.foodDao.deleteById(food_id).catch(() => false)
     }
 
 }

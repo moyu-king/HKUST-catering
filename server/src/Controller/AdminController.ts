@@ -8,6 +8,11 @@ import CouponServiceImpl from "../service/impl/CouponServiceImpl";
 import FoodService from "../service/FoodService";
 import FoodServiceImpl from "../service/impl/FoodServiceImpl";
 import Admin from "../model/Admin";
+import Food from "../model/Food";
+import FoodMenuService from "../service/FoodMenuService";
+import FoodMenuServiceImpl from "../service/impl/FoodMenuServiceImpl";
+import FoodMenu from "../model/FoodMenu";
+import OperateEnum from "../enum/OperateEnum";
 
 class AdminController {
     public static async adminLogin(req: any, res: any): Promise<void> {
@@ -18,13 +23,13 @@ class AdminController {
 
         switch (result) {
             case LoginEnum.serverErr:
-                res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, null))
+                res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
                 break
             case LoginEnum.usernameErr:
-                res.send(HttpUtil.resBody(0, '用户名不存在！', null))
+                res.send(HttpUtil.resBody(0, '用户名不存在！', ''))
                 break
             case LoginEnum.passwordErr:
-                res.send(HttpUtil.resBody(0, '密码错误！', null))
+                res.send(HttpUtil.resBody(0, '密码错误！', ''))
                 break
             default:
                 res.send(HttpUtil.resBody(1, '登录成功！', {token: result}))
@@ -39,9 +44,9 @@ class AdminController {
         const result: any = await adminService.getAccountFlow(date)
 
         if (result) {
-            res.send(HttpUtil.resBody(1, 'success', null))
+            res.send(HttpUtil.resBody(1, 'success', ''))
         } else {
-            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, null))
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
         }
     }
 
@@ -65,7 +70,7 @@ class AdminController {
                 avatar: admin.avatar
             }))
         } else {
-            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, null))
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
         }
     }
 
@@ -76,9 +81,9 @@ class AdminController {
         const adminService: AdminService = new AdminServiceImpl()
         const result: boolean = await adminService.validatePass(username, password)
         if (result) {
-            res.send(HttpUtil.resBody(1, 'ok', null))
+            res.send(HttpUtil.resBody(1, 'ok', ''))
         } else {
-            res.send(HttpUtil.resBody(0, '密码错误！', null))
+            res.send(HttpUtil.resBody(0, '密码错误！', ''))
         }
     }
 
@@ -90,9 +95,9 @@ class AdminController {
         const result: boolean = await adminService.updateAdminAvatar(originalname, destination, path, username)
 
         if (result) {
-            res.send(HttpUtil.resBody(1, '上传成功！', null))
+            res.send(HttpUtil.resBody(1, '上传成功！', ''))
         } else {
-            res.send(HttpUtil.resBody(0, '上传失败', null),)
+            res.send(HttpUtil.resBody(0, '上传失败', ''),)
         }
     }
 
@@ -103,9 +108,9 @@ class AdminController {
         const adminService: AdminService = new AdminServiceImpl()
         const result: boolean = await adminService.updatePass(username, password)
         if (result) {
-            res.send(HttpUtil.resBody(1, '修改成功！', null))
+            res.send(HttpUtil.resBody(1, '修改成功！', ''))
         } else {
-            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, null))
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
         }
     }
 
@@ -115,14 +120,20 @@ class AdminController {
 
         const result: boolean = await couponService.issueCoupon(title, discount, limit, expireIn)
         if (result) {
-            res.send(HttpUtil.resBody(1, '优惠券发行成功！', null))
+            res.send(HttpUtil.resBody(1, '优惠券发行成功！', ''))
         } else {
-            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, null))
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
         }
     }
 
-    public static async getFoodData(req: any, res: any): Promise<void> {
-        res.send("hello world!");
+    public static async getFood(req: any, res: any): Promise<void> {
+        const foodService: FoodService = new FoodServiceImpl()
+        const foods: Food[] | boolean = await foodService.getFoodData()
+        if (foods) {
+            res.send(HttpUtil.resBody(1, 'ok', foods as Food[]))
+        } else {
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
+        }
     }
 
     public static async updateAdminInfo(req: any, res: any): Promise<void> {
@@ -136,22 +147,114 @@ class AdminController {
         const adminService: AdminService = new AdminServiceImpl()
         const result: boolean = await adminService.updateAdminInfo(admin)
         if (result) {
-            res.send(HttpUtil.resBody(1, '信息修改成功！', null))
+            res.send(HttpUtil.resBody(1, '信息修改成功！', ''))
         } else {
-            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, null))
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
         }
     }
 
-    public static async addNewFood(req: any, res: any): Promise<void> {
+    public static async addFood(req: any, res: any): Promise<void> {
         const {food_name, price, type, description} = req.body
         const {destination, path, filename} = req.files[0]
         const foodService: FoodService = new FoodServiceImpl()
         const result: boolean = await foodService.addFood(food_name, price, type, description, destination, path, filename)
 
         if (result) {
-            res.send(HttpUtil.resBody(1, 'ok', null))
+            res.send(HttpUtil.resBody(1, 'ok', ''))
         } else {
-            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, null))
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
+        }
+    }
+
+    public static async deleteFood(req: any, res: any): Promise<void> {
+        const food_id: string = req.query.food_id
+        const foodService: FoodService = new FoodServiceImpl()
+
+        const result: boolean = await foodService.deleteFood(food_id)
+
+        if (result) {
+            res.send(HttpUtil.resBody(1, 'ok', ''))
+        } else {
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
+        }
+    }
+
+    public static async updateFood(req: any, res: any): Promise<void> {
+        const {food_name, price, type, food_id} = req.body
+        const foodService: FoodService = new FoodServiceImpl()
+
+        const result: boolean = await foodService.updateFood(food_name, price, type, food_id)
+
+        if (result) {
+            res.send(HttpUtil.resBody(1, 'ok', ''))
+        } else {
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
+        }
+    }
+
+    public static async getFoodMenu(req: any, res: any): Promise<void> {
+        const foodMenuService: FoodMenuService = new FoodMenuServiceImpl()
+        const foodMenu: boolean | FoodMenu[] = await foodMenuService.getFoodMenu()
+
+        if (foodMenu) {
+            res.send(HttpUtil.resBody(1, 'ok', foodMenu as FoodMenu[]))
+        } else {
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
+        }
+    }
+
+    public static async addFoodMenu(req: any, res: any): Promise<void> {
+        const number: number = req.body.number * 1
+        const date: number = req.body.date * 1
+        const foods_id: string[] = req.body.foods_id
+        const foodMenuService: FoodMenuService = new FoodMenuServiceImpl()
+
+        const result: boolean | any[] = await foodMenuService.addFoodMenu(foods_id, number, date)
+        if (result) {
+            res.send(HttpUtil.resBody(1, 'ok', ''))
+        } else {
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
+        }
+    }
+
+    public static async updateFoodMenuNum(req: any, res: any): Promise<void> {
+        const food_menu_id: string = req.body.food_menu_id
+        const number: number = Number(req.body.number)
+        const foodMenuService: FoodMenuService = new FoodMenuServiceImpl()
+        const result: boolean = await foodMenuService.updateFoodMenuNum(number, food_menu_id)
+
+        if (result) {
+            res.send(HttpUtil.resBody(1, 'ok', ''))
+        } else {
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
+        }
+    }
+
+    public static async deleteFoodMenu(req: any, res: any): Promise<void> {
+        const food_menu_id: string = req.query.food_menu_id
+        const foodMenuService: FoodMenuService = new FoodMenuServiceImpl()
+        const result: boolean = await foodMenuService.deleteFoodMenu(food_menu_id)
+
+        if (result) {
+            res.send(HttpUtil.resBody(1, 'ok', ''))
+        } else {
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
+        }
+    }
+
+    public static async addHasDuplicateFoodMenu(req: any, res: any): Promise<void> {
+        const operate: number = req.body.operate ?? OperateEnum.add
+        const foods_id: string[] = req.body.foods_id
+        const date: number = req.body.date
+        const number: number = req.body.number
+
+        const foodMenuService: FoodMenuService = new FoodMenuServiceImpl()
+        const result: any[] | boolean = await foodMenuService.addHasDuplicateFoodMenu(foods_id, number, date, operate)
+
+        if (result) {
+            res.send(HttpUtil.resBody(1, 'ok', ''))
+        } else {
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
         }
     }
 }
