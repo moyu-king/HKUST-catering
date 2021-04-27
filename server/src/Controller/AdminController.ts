@@ -115,10 +115,11 @@ class AdminController {
     }
 
     public static async issueCoupon(req: any, res: any): Promise<void> {
-        const {title, discount, limit, expireIn} = req.body
+        const {title, discount, expireIn, create_time} = req.body
+        const limit: number = Number(req.body.limit)
         const couponService: CouponService = new CouponServiceImpl()
 
-        const result: boolean = await couponService.issueCoupon(title, discount, limit, expireIn)
+        const result: boolean = await couponService.issueCoupon(title, discount, limit, create_time, expireIn)
         if (result) {
             res.send(HttpUtil.resBody(1, '优惠券发行成功！', ''))
         } else {

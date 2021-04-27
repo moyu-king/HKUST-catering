@@ -25,7 +25,7 @@ router.put('/HKUST/pass_update', Auth, AdminController.updatePass)
 
 router.put('/HKUST/avatar_upload', Auth, avatarUpload.any(), AdminController.updateAvatar)
 
-router.post('/HKUST/coupon_issue', Auth, AdminController.issueCoupon)
+router.post('/HKUST/coupon', Auth, AdminController.issueCoupon)
 
 router.get('/HKUST/food', Auth, AdminController.getFood)
 

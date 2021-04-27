@@ -13,7 +13,7 @@ class CouponDaoImpl implements CouponDao {
     }
 
     addCoupon(coupon: Coupon): Promise<boolean> {
-        this.sql = 'insert into coupon(coupon_id, title, discount, limit, create_time, expireIn) values (?, ?, ?, ?, ?, ?)'
+        this.sql = 'insert into coupon(coupon_id, title, discount, use_limit, create_time, expireIn) values (?, ?, ?, ?, ?, ?)'
         this.sqlParams = [coupon.coupon_id, coupon.title, coupon.discount, coupon.limit, coupon.create_time, coupon.expireIn]
 
         return new Promise((resolve, reject) => {
