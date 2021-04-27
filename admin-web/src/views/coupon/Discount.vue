@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { addCoupon } from "@/service/coupon";
 export default {
   name: "Discount",
   data() {
@@ -83,12 +84,24 @@ export default {
       this.$refs[formName].resetFields();
     },
     issue(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          console.log("发行成功！");
           let start = new Date(this.form.expiresIn[0]).getTime();
           let end = new Date(this.form.expiresIn[1]).getTime();
-          console.log(start, end);
+          const res = await addCoupon({
+            create_time: start,
+            expireIn: end,
+            title: this.form.title,
+            discount: this.form.amount,
+            limit: this.form.limit,
+          });
+          if (res.status) {
+            this.$notify({
+              title: "成功",
+              message: res.message,
+              type: "success",
+            });
+          }
         } else return false;
       });
     },

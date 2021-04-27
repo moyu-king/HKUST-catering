@@ -12,7 +12,7 @@ const ShopPass = () => import("@/views/shop/ShopPass.vue");
 const ShopAvatar = () => import("@/views/shop/ShopAvatar.vue");
 const AddFood = () => import("@/views/food/AddFood.vue");
 const PutFood = () => import("@/views/food/PutFood.vue");
-const Discount = () => import("@/views/discount/Discount.vue");
+const Discount = () => import("@/views/coupon/Discount.vue");
 
 Vue.use(VueRouter)
 
