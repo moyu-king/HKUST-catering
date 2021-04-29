@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-const Home = () => import("@/views/Home");
-const About = () => import("@/views/About");
-const Profile = () => import("@/views/Profile");
+const Home = () => import("@/views/home");
+const About = () => import("@/views/about");
+const Profile = () => import("@/views/profile");
+const Login = () => import("@/views/login")
+const Register = () => import("@/views/register")
+const Setting = () => import("@/views/setting")
+const UserInfo = () => import("@/views/user-info")
 
 Vue.use(VueRouter)
 
@@ -35,13 +39,44 @@ const routes = [
     meta: {
       title: "我的"
     }
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+    meta: {
+      title: "登录"
+    }
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: Register,
+    meta: {
+      title: "注册"
+    }
+  },
+  {
+    path: '/setting',
+    name: "Setting",
+    component: Setting,
+    meta: {
+      title: '设置'
+    }
+  },
+  {
+    path: '/user-info',
+    name: 'UserInfo',
+    component: UserInfo,
+    meta: {
+      title: '用户信息'
+    }
   }
 ]
 
 const router = new VueRouter({
   routes,
   mode: 'history'
-
 })
 
 export default router

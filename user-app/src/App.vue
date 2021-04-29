@@ -1,11 +1,9 @@
 <template>
   <div id="app">
-    <div id="conetent" class="outer-container">
-      <keep-alive include="Home">
-        <router-view></router-view>
-      </keep-alive>
+    <div id="content" class="outer-container">
+      <router-view></router-view>
     </div>
-    <div id="tabBar">
+    <div id="tabBar" v-if="tabBar.show">
       <TabBar></TabBar>
     </div>
   </div>
@@ -14,11 +12,23 @@
 import TabBar from "@/components/nav/TabBar";
 export default {
   name: "App",
+  provide() {
+    return {
+      tabBar: this.tabBar,
+    };
+  },
   components: {
     TabBar,
+  },
+  data() {
+    return {
+      tabBar: {
+        show: false,
+      },
+    };
   },
 };
 </script>
 <style lang="scss">
-@import "./assets/css/normalize.css";
+@import "./assets/css/base.css";
 </style>

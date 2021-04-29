@@ -1,6 +1,6 @@
 <template>
   <div class="NavBar">
-    <van-nav-bar :title="title" :border="border" left-text="返回" left-arrow>
+    <van-nav-bar :title="title" :border="border">
       <template #left>
         <slot name="left"></slot>
       </template>

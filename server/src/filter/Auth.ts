@@ -8,7 +8,7 @@ const Auth = (req: any, res: any, next): void => {
         const token: string = req.headers.authorization.split(" ").pop();
         let result: any = JWT.verify(token);
         if (result) {
-            req.currentUseranme = result.username;//将信息存放到 state 中
+            req.currentUsername = result.username;//将信息存放到 state 中
             next();
         } else {
             res.status(401).send(HttpUtil.resBody(0, "登录信息已过期，请重新登录", null));

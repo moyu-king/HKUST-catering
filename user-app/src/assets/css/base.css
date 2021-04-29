@@ -1,0 +1,19 @@
+@import url(./normalize.css);
+
+html,
+body {
+  min-height: 100vh;
+}
+
+body,
+input {
+  background: #f7f8fa;
+}
+
+a {
+  color: black;
+}
+
+a:active {
+  color: #48dbfb;
+}

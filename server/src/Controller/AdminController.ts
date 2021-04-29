@@ -55,7 +55,7 @@ class AdminController {
     }
 
     public static async getAdminInfo(req: any, res: any): Promise<void> {
-        const username = req.currentUseranme
+        const username = req.currentUsername
 
         const adminService: AdminService = new AdminServiceImpl()
         const admin: Admin = await adminService.getAdminInfo(username)
@@ -76,7 +76,7 @@ class AdminController {
 
     public static async validatePass(req: any, res: any): Promise<void> {
         const password: string = req.body.password
-        const username: string = req.currentUseranme
+        const username: string = req.currentUsername
 
         const adminService: AdminService = new AdminServiceImpl()
         const result: boolean = await adminService.validatePass(username, password)
@@ -88,7 +88,7 @@ class AdminController {
     }
 
     public static async updateAvatar(req: any, res: any) {
-        const username: string = req.currentUseranme
+        const username: string = req.currentUsername
         const {originalname, destination, path} = req.files[0]
 
         const adminService: AdminService = new AdminServiceImpl()
@@ -102,7 +102,7 @@ class AdminController {
     }
 
     public static async updatePass(req: any, res: any): Promise<void> {
-        const username: string = req.currentUseranme
+        const username: string = req.currentUsername
         const password: string = req.body.password
 
         const adminService: AdminService = new AdminServiceImpl()
@@ -139,7 +139,7 @@ class AdminController {
 
     public static async updateAdminInfo(req: any, res: any): Promise<void> {
         const admin = new Admin()
-        admin.username = req.currentUseranme
+        admin.username = req.currentUsername
         admin.shop_name = req.body.shop_name
         admin.phone = req.body.phone
         admin.alias = req.body.alias

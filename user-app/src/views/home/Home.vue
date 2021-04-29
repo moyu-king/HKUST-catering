@@ -71,6 +71,7 @@ export default {
   components: {
     NavBar,
   },
+  inject: ["tabBar"],
   data() {
     return {
       showPicker: false,
@@ -99,8 +100,14 @@ export default {
       return array;
     },
   },
-  created() {
+  mounted() {
+    const { tabBar } = this;
+    tabBar.show = true;
     this.getLocation();
+  },
+  destroyed() {
+    const { tabBar } = this;
+    tabBar.show = false;
   },
   methods: {
     getLocation() {
@@ -163,152 +170,5 @@ export default {
 </script>
 
 <style lang="scss">
-@font-face {
-  font-family: myFont;
-  src: url(~@/assets/font/myFont.ttf);
-}
-@mixin center-flex {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-$transparentBg: rgba(255, 255, 255, 0);
-$navBarH: 50px;
-
-.Home {
-  .NavBar {
-    width: 100%;
-    background-color: $transparentBg;
-
-    .van-nav-bar {
-      background-color: $transparentBg;
-    }
-    .van-nav-bar__title {
-      color: #fff;
-    }
-    .navBar-left {
-      display: flex;
-      align-items: center;
-
-      .location,
-      .distance {
-        margin-left: 4px;
-        font-size: 14px;
-        color: #fff;
-      }
-    }
-  }
-  .swiper {
-    margin-top: -$navBarH;
-    width: 100%;
-    height: 80vw;
-    @include center-flex();
-    background: rgb(249, 179, 129);
-
-    .my-swipe {
-      width: 90%;
-      height: 55%;
-      border-radius: 10px;
-
-      .van-swipe-item > .swiper-img {
-        height: 100%;
-        width: 100%;
-      }
-    }
-  }
-
-  .content {
-    margin: -5vh auto 5vh;
-    width: 90vw;
-    height: 120vw;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 12px #ebedf0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-
-    .content-item {
-      width: 90%;
-      height: 25%;
-      border-radius: inherit;
-      display: flex;
-      align-items: center;
-
-      & > img {
-        margin-left: 10vw;
-        width: 16vw;
-        height: 16vw;
-      }
-
-      &-text {
-        margin-left: 5vw;
-        display: flex;
-        flex-direction: column;
-        font: {
-          size: 20px;
-          family: myFont;
-        }
-        .deadline {
-          margin-top: 8px;
-          font-size: 14px;
-        }
-      }
-
-      .breakfast-text {
-        color: #1296db;
-      }
-      .lunch-text {
-        color: #ec6646;
-      }
-      .dinner-text {
-        color: #f9ca24;
-      }
-    }
-    //#EC6646
-    .breakfast,
-    .dinner {
-      background: {
-        image: url(~@/assets/img/background/breakfast.png);
-        size: cover;
-      }
-    }
-
-    .lunch {
-      background: {
-        image: url(~@/assets/img/background/lunch.png);
-        size: cover;
-      }
-    }
-
-    &:before,
-    &:after {
-      content: "";
-    }
-  }
-
-  .propaganda {
-    width: 100%;
-    height: 95vw;
-    position: relative;
-    @include center-flex();
-
-    &-tag {
-      padding: 10px 15px;
-      position: absolute;
-      top: 20px;
-      left: 0;
-      color: white;
-      border-radius: 5px;
-      background-color: rgb(255, 0, 0);
-    }
-
-    &-banner {
-      width: 81%;
-      height: 48vw;
-    }
-  }
-}
+@import "./style.scss";
 </style>

@@ -1,0 +1,30 @@
+{
+  "id": "2517973",
+  "name": "order-food",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1348307",
+      "name": "切换",
+      "font_class": "exchange",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "7252461",
+      "name": "User Settings",
+      "font_class": "user-setting",
+      "unicode": "e6e1",
+      "unicode_decimal": 59105
+    },
+    {
+      "icon_id": "3092322",
+      "name": "退出",
+      "font_class": "login-out",
+      "unicode": "e792",
+      "unicode_decimal": 59282
+    }
+  ]
+}

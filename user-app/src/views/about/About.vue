@@ -20,30 +20,18 @@ export default {
   components: {
     NavBar,
   },
+  inject: ["tabBar"],
+  mounted() {
+    const { tabBar } = this;
+    tabBar.show = true;
+  },
+  destroyed() {
+    const { tabBar } = this;
+    tabBar.show = false;
+  },
 };
 </script>
 
 <style lang="scss">
-$transparentBg: rgba(255, 255, 255, 0);
-$navBarH: 50px;
-
-.About {
-  .NavBar {
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0);
-
-    .van-nav-bar {
-      background-color: rgba(255, 255, 255, 0);
-    }
-    .van-nav-bar__title {
-      color: #fff;
-    }
-  }
-  .content {
-    margin-top: -50px;
-    & > img {
-      width: 100%;
-    }
-  }
-}
+@import "./style.scss";
 </style>

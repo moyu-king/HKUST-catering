@@ -1,0 +1,16 @@
+@import "../../assets/font/iconfont/iconfont.css";
+
+.setting {
+  .navBar-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .van-icon {
+      color: black;
+    }
+  }
+  
+  i {
+    padding-right:5px;
+  }
+}

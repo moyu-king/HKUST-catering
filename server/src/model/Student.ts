@@ -1,17 +1,33 @@
 class Student {
-    private _stu_id: number;
-    private _name: string;
-    private _password: string;
-    private _phone: number;
-    private _address: string;
-    private _avatar: string;
-
-    get stu_id(): number {
-        return this._stu_id;
+    get phone(): string {
+        return this._phone;
     }
 
-    set stu_id(value: number) {
-        this._stu_id = value;
+    set phone(value: string) {
+        this._phone = value;
+    }
+    private _student_id: string;
+    private _name: string;
+    private _password: string;
+    private _address: string;
+    private _avatar: string;
+    private _wallet: string
+    private _phone: string
+
+    get student_id(): string {
+        return this._student_id;
+    }
+
+    set student_id(value: string) {
+        this._student_id = value;
+    }
+
+    get wallet(): string {
+        return this._wallet;
+    }
+
+    set wallet(value: string) {
+        this._wallet = value;
     }
 
     get name(): string {
@@ -28,14 +44,6 @@ class Student {
 
     set password(value: string) {
         this._password = value;
-    }
-
-    get phone(): number {
-        return this._phone;
-    }
-
-    set phone(value: number) {
-        this._phone = value;
     }
 
     get address(): string {

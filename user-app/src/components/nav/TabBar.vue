@@ -26,6 +26,9 @@ export default {
       this.initActive(to.path);
     },
   },
+  created() {
+    this.initActive(this.$route.path)
+  },
   methods: {
     initActive(path) {
       switch (path) {
