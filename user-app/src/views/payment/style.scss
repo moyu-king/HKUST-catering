@@ -1,0 +1,137 @@
+.payment {
+  padding-bottom: 100px;
+
+  &-card {
+    margin: 0;
+    background-color: #fff;
+
+    &-delete {
+      height: 100%;
+    }
+
+    .van-card-title {
+      font: {
+        size: 14px;
+        weight: 700;
+      }
+    }
+  }
+
+  &-user {
+    .van-cell__value {
+      display: flex;
+      align-items: center;
+    }
+
+    &-modify {
+      padding: 10px;
+      width: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &-icon.img {
+      width: 18px;
+    }
+
+    &-icon {
+      padding-right: 8px;
+    }
+
+    &-info {
+      width: 80%;
+      padding: 0 10px;
+      font-size: 14px;
+
+      &-bottom {
+        width: 100%;
+      }
+
+      &-top {
+        display: flex;
+      }
+
+      .phone,
+      .name,
+      .address {
+        display: flex;
+        align-items: center;
+      }
+
+      .phone {
+        margin-left: 20px;
+      }
+
+      .address {
+        width: 100%;
+
+        &-text {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+
+      &-bottom {
+        margin-top: 6px;
+      }
+    }
+  }
+
+  .popup-payment {
+    top: 35%;
+    width: 85%;
+    max-width: 400px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .van-password-input {
+      width: 90%;
+
+      &__item {
+        background-color: #f7f8fa;
+      }
+
+      i {
+        padding: 0;
+      }
+    }
+
+    .payment-way {
+      margin-top: 20px;
+      font-size: 14px;
+      width: 90%;
+      display: flex;
+      justify-content: space-between;
+
+      &-selection {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      &-icon {
+        width: 14px;
+        height: 14px;
+        margin-right: 5px;
+      }
+    }
+
+    .payment-button {
+      width: 100%;
+      margin-top: 20px;
+      text-align: center;
+      .van-button {
+        width: 90%;
+      }
+    }
+  }
+
+  .van-number-keyboard {
+    z-index: 9999;
+  }
+}

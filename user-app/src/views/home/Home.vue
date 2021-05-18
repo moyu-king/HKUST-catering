@@ -25,14 +25,14 @@
       </van-swipe>
     </div>
     <div class="content">
-      <div class="breakfast content-item">
+      <div class="breakfast content-item" @click="Undeveloped">
         <img src="@/assets/img/icon/breakfast.png" alt="" />
         <div class="content-item-text breakfast-text">
           <span class="stage">早餐</span>
           <span class="deadline">8:30&nbsp;截止时间</span>
         </div>
       </div>
-      <div class="lunch content-item">
+      <div class="lunch content-item" @click="pageJump">
         <img src="@/assets/img/icon/lunch.png" alt="" />
         <div class="content-item-text lunch-text">
           <span class="stage">午餐</span>
@@ -103,13 +103,16 @@ export default {
   mounted() {
     const { tabBar } = this;
     tabBar.show = true;
-    this.getLocation();
+    this.getLocation()
   },
   destroyed() {
     const { tabBar } = this;
     tabBar.show = false;
   },
   methods: {
+    pageJump() {
+      this.$router.push("/order-food");
+    },
     getLocation() {
       //利用百度地图获取当前经纬度
       const _this = this;

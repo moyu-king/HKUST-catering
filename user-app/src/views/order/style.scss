@@ -1,0 +1,48 @@
+.order {
+  .van-card {
+    background: white;
+
+    &__thumb {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .QRCodeImg {
+    width: 70%;
+    height: 70%;
+  }
+
+  .van-popup {
+    width: 100vw;
+    height: 100vh;
+    background: #f7f8fa;
+  }
+
+  &-popup {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+
+    .qrcode-use-tip {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .qrcode {
+      margin-top: 60px;
+      display: flex;
+      justify-content: center;
+    }
+
+    &-details {
+      margin: 20px 0 60px 0;
+    }
+  }
+
+  &-confirm-button {
+    width: 80px;
+  }
+}

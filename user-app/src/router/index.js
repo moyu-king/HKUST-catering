@@ -8,6 +8,11 @@ const Login = () => import("@/views/login")
 const Register = () => import("@/views/register")
 const Setting = () => import("@/views/setting")
 const UserInfo = () => import("@/views/user-info")
+const OrderFood = () => import("@/views/order-food")
+const Payment = () => import("@/views/payment")
+const Activity = () => import("@/views/activity")
+const PaymentPassword = () => import("@/views/payment-password")
+const Order = () => import("@/views/order")
 
 Vue.use(VueRouter)
 
@@ -70,6 +75,46 @@ const routes = [
     component: UserInfo,
     meta: {
       title: '用户信息'
+    }
+  },
+  {
+    path: '/order-food',
+    name: 'OrderFood',
+    component: OrderFood,
+    meta: {
+      title: '餐饮预订'
+    }
+  },
+  {
+    path: '/payment',
+    name: 'Payment',
+    component: Payment,
+    meta: {
+      title: '支付'
+    }
+  },
+  {
+    path: '/activity',
+    name: "Activity",
+    component: Activity,
+    meta: {
+      title: '活动'
+    }
+  },
+  {
+    path: '/payment-password',
+    name: "PaymentPassword",
+    component: PaymentPassword,
+    meta: {
+      title: '支付密码'
+    }
+  },
+  {
+    path: '/order',
+    name: "Order",
+    component: Order,
+    meta: {
+      title: '订单'
     }
   }
 ]

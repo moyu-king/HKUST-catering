@@ -13,6 +13,12 @@ import FoodMenuService from "../service/FoodMenuService";
 import FoodMenuServiceImpl from "../service/impl/FoodMenuServiceImpl";
 import FoodMenu from "../model/FoodMenu";
 import OperateEnum from "../enum/OperateEnum";
+import OrderService from "../service/OrderService";
+import OrderServiceImpl from "../service/impl/OrderServiceImpl";
+import Order from "../model/Order";
+import StudentService from "../service/StudentService";
+import StudentServiceImpl from "../service/impl/StudentServiceImpl";
+import Student from "../model/Student";
 
 class AdminController {
     public static async adminLogin(req: any, res: any): Promise<void> {
@@ -254,6 +260,42 @@ class AdminController {
 
         if (result) {
             res.send(HttpUtil.resBody(1, 'ok', ''))
+        } else {
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
+        }
+    }
+
+    public static async getOutstandingOrder(req: any, res: any): Promise<void> {
+        interface orderResult {
+            foods: Food[],
+            userInfo: Student,
+            userOrder: Order
+        }
+
+        const orderService: OrderService = new OrderServiceImpl()
+        const orders: Order[] = await orderService.getOutstandingOrder()
+        
+        if (orders) {
+            const studentIds: string[] = [...new Set(orders.map(order => order.student_id))]
+            const studentService: StudentService = new StudentServiceImpl()
+            const studentPromiseArr: any[] = studentIds.map(item => studentService.getStudentInfo(item))
+            const students: Student[] = await Promise.all(studentPromiseArr)
+
+
+            const orderIds: string[] = orders.map(order => order.order_id)
+            const foods: any[] = await orderService.getStudentOrderFoods(orderIds)
+
+            const response: orderResult[] = []
+            orders.forEach(order => {
+                const result: orderResult = {
+                    foods: foods.find(food => food.order_id === order.order_id).food,
+                    userInfo: students.find(student => student.student_id === order.student_id),
+                    userOrder: order
+                }
+                response.push(result)
+            })
+
+            res.send(HttpUtil.resBody(1, 'ok', response))
         } else {
             res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
         }

@@ -1,5 +1,5 @@
 import * as path from "path";
-import OSUtil from "./OSUtil";
+import * as ip from 'ip'
 
 class ConstantUtil {
     public static port: number = 4396
@@ -9,7 +9,7 @@ class ConstantUtil {
     public static uploadFoodImagePath: string = path.join(__dirname, '../upload/HKUST/food')
 
     public static staticDir(): string {
-        return `http://${OSUtil.getLocalIP()}:${this.port}/static`
+        return `http://${ip.address()}:${this.port}/static`
     }
 }
 

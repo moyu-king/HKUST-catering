@@ -99,59 +99,52 @@
 <script>
 // @ is an alias to /src
 import { getAdminInfo } from "@/service/admin-info";
+import { getOutstandingOrders } from "@/service/order";
+import { orderSocket } from "@/service/socket";
 export default {
   name: "Index",
   inject: ["admin"],
   data() {
     return {
-      orders: [
-        {
-          id: 1,
-          total: 12,
-          create_time: "2021-03-24 11:30:00",
-          username: "hzz",
-          phone: 13907857195,
-          orderNum: "WM45671699464",
-          address: "广西科技大学东环校区北区7栋212",
-          avatar: "http://115.29.177.15:3344/static/profile/evz_1_avatar.png",
-          details: [
-            { name: "猪肝粉肠", number: 1, price: 10 },
-            { name: "包装费", number: 1, price: 1 },
-            { name: "配送费", number: 1, price: 1 },
-          ],
-        },
-        {
-          id: 2,
-          total: 22,
-          create_time: "2021-03-24 11:00:00",
-          username: "hzw",
-          phone: 18776493825,
-          orderNum: "WM6589544885",
-          address: "广西科技大学东环校区南区12栋209",
-          avatar:
-            "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-          details: [
-            { name: "红烧排骨", number: 1, price: 10 },
-            { name: "油麦菜", number: 1, price: 5 },
-            { name: "卤蛋", number: 2, price: 5 },
-            { name: "包装费", number: 1, price: 1 },
-            { name: "配送费", number: 1, price: 1 },
-            { name: "优惠券", number: 1, price: -5 },
-          ],
-        },
-      ],
+      socket: null,
+      orders: [],
       menu_active: this.$route.path,
     };
   },
   async mounted() {
+    //商家信息
     const { admin } = this;
     const res = await getAdminInfo();
-    admin.username = res.data.username
-    admin.phone = res.data.phone
-    admin.avatar = res.data.avatar
-    admin.alias = res.data.alias
-    admin.address = res.data.address
-    admin.shop_name = res.data.shop_name
+    admin.username = res.data.username;
+    admin.phone = res.data.phone;
+    admin.avatar = res.data.avatar;
+    admin.alias = res.data.alias;
+    admin.address = res.data.address;
+    admin.shop_name = res.data.shop_name;
+
+    //获取未处理订单
+    this.orders = (await getOutstandingOrders()).data;
+    this.orders.sort(
+      (pre, next) => pre.userOrder.create_time - next.userOrder.create_time
+    );
+
+    //websocket
+    this.socket = orderSocket({
+      username: admin.username,
+    });
+
+    this.socket.addEventListener("message", (e) => {
+      const res = JSON.parse(e.data);
+      this.orders.push(res.data);
+      console.log(res.data);
+      if (res.status) {
+      } else {
+        this.$notify.error({
+          title: "错误",
+          message: "服务器可能已崩溃",
+        });
+      }
+    });
   },
   methods: {
     warningMsg() {
@@ -169,6 +162,7 @@ export default {
   $navH: 8vh;
   $min-navH: 60px;
   $containerH: 100vh - $navH;
+  $containerMaxHeight: calc(100vh - #{$min-navH});
 
   .header {
     width: 100%;
@@ -222,6 +216,7 @@ export default {
 
   .el-container {
     height: $containerH;
+    max-height: $containerMaxHeight;
     min-height: 500px;
 
     .aside {
@@ -232,7 +227,7 @@ export default {
       z-index: 9;
       overflow: auto;
 
-      &::-webkit-scrollbar{
+      &::-webkit-scrollbar {
         width: 0;
       }
 

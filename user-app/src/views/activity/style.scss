@@ -1,0 +1,62 @@
+.activity {
+  &-coupon {
+    display: flex;
+    align-items: center;
+    padding: 15px 10px;
+    padding-right: 20px;
+
+    &-button {
+      width: 80px;
+    }
+
+    &-info {
+      flex-grow: 1;
+      padding: 5px;
+      font-size: 14px;
+    }
+
+    &-info {
+      height: 100%;
+      display: flex;
+      align-items: center;
+
+      .money {
+        padding: 5px;
+        width: 30%;
+        color: #ee0a24;
+
+        .discount {
+          height: 24px;
+          line-height: 24px;
+          text-align: center;
+          span {
+            font-size: 24px;
+            font-weight: 700;
+          }
+        }
+
+        .useLimit {
+          margin-top: 8px;
+          font-size: 12px;
+        }
+      }
+
+      .description {
+        width: 70%;
+
+        .title {
+          height: 24px;
+          line-height: 24px;
+          font-weight: 700;
+        }
+
+        .expire {
+          margin-top: 8px;
+          font: {
+            family: "华文仿宋";
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,6 @@
 <template>
   <div class="Profile">
-    <NavBar title="我的" :border="false">
-      <template #left><i></i></template>
-    </NavBar>
+    <NavBar title="我的" :border="false"></NavBar>
     <div class="floor">
       <van-image
         round
@@ -23,10 +21,10 @@
         <span>我的余额</span>
       </div>
       <div class="discount item">
-        <span class="number">{{ user.coupon }}&nbsp;<font>张</font></span>
+        <span class="number">{{ user.couponsCount }}&nbsp;<font>张</font></span>
         <span>我的优惠券</span>
       </div>
-      <div class="order item">
+      <div class="order item" >
         <span class="number">{{ user.order }}</span>
         <span>本月订单</span>
       </div>
@@ -42,19 +40,19 @@
           <img src="@/assets/img/icon/address.png" alt="" />
           <span>收货地址</span>
         </li>
-        <li class="tool-content-item">
+        <li class="tool-content-item" @click="jump('/activity')">
           <img src="@/assets/img/icon/about.png" alt="" />
-          <span>关于鲜适</span>
+          <span>近期活动</span>
         </li>
         <li class="tool-content-item">
           <img src="@/assets/img/icon/service.png" alt="" />
           <span>我的客服</span>
         </li>
-        <li class="tool-content-item">
+        <li class="tool-content-item" @click="jump('/order')">
           <img src="@/assets/img/icon/invoice.png" alt="" />
           <span>发票汇总</span>
         </li>
-        <li class="tool-content-item" @click="jump">
+        <li class="tool-content-item" @click="jump('/setting')">
           <img src="@/assets/img/icon/setting.png" alt="" />
           <span>设置</span>
         </li>
@@ -79,7 +77,7 @@ export default {
         studentId: "",
         avatar: "",
         wallet: 0,
-        coupon: 0,
+        couponsCount: 0,
         order: 0,
       },
     };
@@ -104,8 +102,8 @@ export default {
     tabBar.show = false;
   },
   methods: {
-    jump() {
-      this.$router.push("/setting");
+    jump(route) {
+      this.$router.push(route);
     },
   },
 };

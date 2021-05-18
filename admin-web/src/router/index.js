@@ -98,7 +98,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   document.title = to.matched[0].meta.title;
   
-  if (!localStorage.getItem('token') && document.title !== '登录') {
+  if (!localStorage.getItem('adminToken') && document.title !== '登录') {
     next('/login')
   } else {
     next();

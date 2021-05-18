@@ -98,7 +98,7 @@ export default {
   },
   computed: {
     headers() {
-      return { authorization: "Bearer " + localStorage.getItem("token") };
+      return { authorization: "Bearer " + localStorage.getItem("adminToken") };
     },
   },
   methods: {

@@ -1,13 +1,6 @@
 <template>
   <div class="user-info">
-    <NavBar title="个人信息">
-      <template #left>
-        <div class="navBar-left" @click="goBack">
-          <van-icon name="arrow-left" />
-          <span>返回</span>
-        </div>
-      </template>
-    </NavBar>
+    <NavBar title="个人信息" :back="true"></NavBar>
     <div class="user-info-avatar">
       <van-image round width="6rem" height="6rem" :src="user.avatar" />
       <span>修改头像</span>

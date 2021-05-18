@@ -30,7 +30,8 @@
               type="password"
               v-model="ruleForm.pass"
               autocomplete="off"
-            ></el-input>
+            >
+            </el-input>
           </el-form-item>
           <el-form-item class="button-item">
             <el-button
@@ -99,7 +100,7 @@ export default {
             username: this.ruleForm.username,
             password: this.ruleForm.pass,
           });
-          
+
           if (res.status) {
             this.$notify({
               title: "成功",
@@ -107,7 +108,7 @@ export default {
               type: "success",
             });
 
-            localStorage.setItem("token", res.data.token);
+            localStorage.setItem("adminToken", res.data.token);
             this.$router.push("/");
           }
 

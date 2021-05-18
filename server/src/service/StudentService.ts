@@ -10,6 +10,16 @@ interface StudentService {
     updateStudentInfo(studentId: string, username: string, phone: string, address: string): Promise<boolean>
 
     getStudentInfo(studentId: string): Promise<Student>
+
+    getPaymentPass(studentId: string): Promise<boolean | number>
+
+    updatePaymentPass(studentId: string, payment_password: string): Promise<boolean>
+
+    validatePaymentPass(studentId: string, payment_password: string): Promise<boolean | number>
+
+    updateStudentWallet(studentId: string, price: number): Promise<boolean>
+
+    findStudentWallet(studentId: string): Promise<number | boolean>
 }
 
 export default StudentService

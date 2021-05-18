@@ -1,8 +1,6 @@
 <template>
   <div class="About">
-    <NavBar title="关于科大餐饮" :border="false">
-      <template #left><i></i></template>
-    </NavBar>
+    <NavBar title="关于科大餐饮" :border="false"></NavBar>
     <div class="content">
       <img src="@/assets/img/about/introduce.jpg" />
       <img src="@/assets/img/about/about1.jpg" />

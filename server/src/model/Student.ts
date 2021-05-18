@@ -1,11 +1,4 @@
 class Student {
-    get phone(): string {
-        return this._phone;
-    }
-
-    set phone(value: string) {
-        this._phone = value;
-    }
     private _student_id: string;
     private _name: string;
     private _password: string;
@@ -13,6 +6,23 @@ class Student {
     private _avatar: string;
     private _wallet: string
     private _phone: string
+    private _payment_password: string
+
+    get payment_password(): string {
+        return this._payment_password;
+    }
+
+    set payment_password(value: string) {
+        this._payment_password = value;
+    }
+
+    get phone(): string {
+        return this._phone;
+    }
+
+    set phone(value: string) {
+        this._phone = value;
+    }
 
     get student_id(): string {
         return this._student_id;

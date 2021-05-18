@@ -153,7 +153,7 @@ export default {
         if (valid) {
           const res = await updatePass({ password: this.newForm.newPass });
           if (res.status) {
-            localStorage.removeItem("token");
+            localStorage.removeItem("adminToken");
             this.centerDialogVisible = true;
           }
         } else {

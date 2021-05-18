@@ -2,7 +2,9 @@ import axios from 'axios'
 import { Toast } from 'vant'
 
 // export const API_BASE_URL = "http://127.0.0.1:4396/app"
-export const API_BASE_URL = "http://192.168.1.112:4396/app"
+export const API_BASE_URL = "http://192.168.201.2:4396/app"
+
+export const RESOURCES_BASE_URL = 'http://192.168.201.2:4396/static/App'
 
 export function axiosInstance(config) {
   const instance = axios.create({
@@ -34,9 +36,8 @@ export function axiosInstance(config) {
     const status = error.response.status
 
     if (status === 401) {
-
       Toast({
-        message: error.response.message,
+        message: error.response.data.message,
         icon: 'cross'
       })
 
@@ -46,6 +47,11 @@ export function axiosInstance(config) {
     } else if (status === 500) {
       Toast({
         message: "服务器出错",
+        icon: 'cross'
+      })
+    } else if (status === 400) {
+      Toast({
+        message: "客户端请求错误",
         icon: 'cross'
       })
     }

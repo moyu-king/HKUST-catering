@@ -9,6 +9,8 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.11.0",
+    "qrcodejs2": "0.0.2",
+    "socket.io-client": "^4.1.1",
     "vant": "^2.12.15",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",

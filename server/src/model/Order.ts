@@ -1,11 +1,43 @@
 class Order {
+    get discount(): number {
+        return this._discount;
+    }
+
+    set discount(value: number) {
+        this._discount = value;
+    }
     private _order_id: string
-    private _price: string
-    private _create_time: string
-    private _order_type: string
-    private _admin_phone: string
     private _student_id: string
-    private _status: string
+    private _admin_phone: string
+    private _status: number
+    private _create_time: number
+    private _order_type: number
+    private _price: number
+    private _discount: number
+
+    get price(): number {
+        return this._price;
+    }
+
+    set price(value: number) {
+        this._price = value;
+    }
+
+    get order_type(): number {
+        return this._order_type;
+    }
+
+    set order_type(value: number) {
+        this._order_type = value;
+    }
+
+    get status(): number {
+        return this._status;
+    }
+
+    set status(value: number) {
+        this._status = value;
+    }
 
     get order_id(): string {
         return this._order_id;
@@ -13,30 +45,6 @@ class Order {
 
     set order_id(value: string) {
         this._order_id = value;
-    }
-
-    get price(): string {
-        return this._price;
-    }
-
-    set price(value: string) {
-        this._price = value;
-    }
-
-    get create_time(): string {
-        return this._create_time;
-    }
-
-    set create_time(value: string) {
-        this._create_time = value;
-    }
-
-    get order_type(): string {
-        return this._order_type;
-    }
-
-    set order_type(value: string) {
-        this._order_type = value;
     }
 
     get admin_phone(): string {
@@ -55,12 +63,12 @@ class Order {
         this._student_id = value;
     }
 
-    get status(): string {
-        return this._status;
+    get create_time(): number {
+        return this._create_time;
     }
 
-    set status(value: string) {
-        this._status = value;
+    set create_time(value: number) {
+        this._create_time = value;
     }
 }
 

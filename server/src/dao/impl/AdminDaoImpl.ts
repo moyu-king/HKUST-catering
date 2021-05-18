@@ -75,6 +75,16 @@ class AdminDaoImpl implements AdminDao {
             this.connection.end()
         })
     }
+
+    findFirstOnce(): Promise<Admin> {
+        this.sql = 'select * from admin limit 1 offset 0'
+        return new Promise((resolve, reject) => {
+            this.connection.query(this.sql, this.sqlParams, (err, result: Admin[]) => {
+                if (err) reject(err)
+                else resolve(result[0])
+            })
+        })
+    }
 }
 
 export default AdminDaoImpl

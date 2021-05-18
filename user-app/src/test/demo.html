@@ -1,48 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>H5定位</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .box {
+      font-size: 24px !important;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="box" style="font-size: 16px;">13465</div>
+  <div class="qrCode"></div>
+  <script>
+    // const a = '123456'
+    // const regExp= new RegExp('^\\d{6}$')
+    // console.log(regExp.test(a))
 
-</body>
-<script>
-  //经纬度计算两点之间的距离
-  function space(lat1, lng1, lat2, lng2) {
-    var radLat1 = lat1 * Math.PI / 180.0;
-    var radLat2 = lat2 * Math.PI / 180.0;
-    var a = radLat1 - radLat2;
-    var b = lng1 * Math.PI / 180.0 - lng2 * Math.PI / 180.0;
-    var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
-    s = s * 6378.137;
-    s = Math.round(s * 10000) / 10000;
-    return s  // 单位千米
-  }
-  function getlocation() {
-    try {
-      const geolocation = new BMap.Geolocation();
-      geolocation.getCurrentPosition(function (r) {
-        console.log(r, "aaaa");
-        console.log(this.getStatus() == BMAP_STATUS_SUCCESS)
-        console.log(r.point)
-        if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-          const lat = r.point.lat;
-          const lng = r.point.lng;
-          let result = space(24.337818, 109.454649, 24.339539, 109.447206);
-          console.log(result);
-        }
-      });
-    } catch (e) {
-      console.log(e)
+    class test {
+      name
+      age
+      constructor(name, age) {
+        this.name = name
+        this.age = age
+      }
     }
-  }
 
-  getlocation();
+    let a = new test()
+    a.age = 3
+    const ids = ['a', 'b', 'c']
+    const bothIds = []
+    ids.forEach(item => {
+      a.name = item
+      bothIds.push(a)
+    })
+    console.log(bothIds)
 
-</script>
+    new QRCode(
+      document.getElementById("qrcode"),
+      "http://jindo.dev.naver.com/collie"
+    );
+  </script>
+</body>
 
 </html>

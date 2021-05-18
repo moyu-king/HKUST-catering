@@ -7,3 +7,10 @@ export async function getOdersByDateAndPagination(params) {
     params
   })
 }
+
+export async function getOutstandingOrders() {
+  return axiosInstance({
+    method: 'get',
+    url: '/outstanding-order',
+  })
+}

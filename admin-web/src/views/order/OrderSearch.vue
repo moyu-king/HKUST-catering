@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { getOdersByDateAndPagination } from "@/service/order-search";
+import { getOdersByDateAndPagination } from "@/service/order";
 export default {
   name: "OrderSearch",
   filters: {

@@ -1,0 +1,165 @@
+.order-food {
+  .navBar-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .van-icon {
+      color: black;
+    }
+  }
+
+  i {
+    padding-right: 5px;
+  }
+
+  &-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 120px;
+  }
+
+  &-date {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 16vw;
+    height: 80px;
+    margin-right: 3vw;
+    border-radius: 8px;
+    color: #34495e;
+    background: #e6e6e6;
+    transition: background 0.3s, color 0.3s;
+
+    &.active {
+      color: white;
+      background: #fe4e36;
+    }
+    &__week {
+      font-size: 18px;
+    }
+
+    &__time {
+      margin-top: 10px;
+      font-size: 12px;
+    }
+
+    &:last-child {
+      margin: 0;
+    }
+  }
+
+  &-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 80px;
+  }
+
+  &-item {
+    padding: 0 10px 0 20px;
+    margin-top: 20px;
+    box-sizing: border-box;
+    width: 50vw;
+    height: 190px;
+    text-align: center;
+
+    &:nth-child(2n) {
+      padding: 0 20px 0 10px;
+    }
+
+    &__floor {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 3px;
+      border-radius: 10px;
+      border: 1px solid #fdcb6e;
+      font-size: 14px;
+    }
+
+    &-introduction {
+      height: 160px;
+      border-radius: 5px;
+      background-color: #faece5;
+    }
+
+    &-name {
+      margin: 5px 0;
+    }
+
+    &-footer {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+
+    &-price {
+      color: #df3636;
+    }
+  }
+  // toolBar
+  .tag {
+    position: fixed;
+    bottom: 5px;
+    right: 10px;
+
+    .van-tag {
+      display: block;
+      width: 40px;
+      margin-bottom: 5px;
+      font-size: 12px;
+      border: 1px solid #fdcb6e;
+      border-radius: 5px;
+      text-align: center;
+    }
+  }
+
+  .shopCart {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    width: 220px;
+    height: 45px;
+    border-radius: 25px;
+    color: white;
+    background-color: #fdcb6e;
+
+    .totle-price {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 140px;
+      background-color: #333;
+      border-radius: 25px 0 0 25px;
+
+      .van-icon {
+        font-size: 22px;
+      }
+
+      .price-text {
+        margin-left: 10px;
+        font-size: 16px;
+      }
+    }
+
+    .payment-button {
+      flex-grow: 1;
+      padding-right: 5px;
+      text-align: center;
+      line-height: 45px;
+      background-color: #ff0000;
+      border-radius: 0 25px 25px 0;
+      font-size: 14px;
+    }
+  }
+
+  .van-popup {
+    padding-top: 20px;
+    box-sizing: border-box;
+    background: #f7f8fa;
+  }
+}

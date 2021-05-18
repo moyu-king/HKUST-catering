@@ -62,7 +62,7 @@ export default {
       return `${this.username}_avatar`;
     },
     headers() {
-      return { authorization: "Bearer " + localStorage.getItem("token") };
+      return { authorization: "Bearer " + localStorage.getItem("adminToken") };
     },
   },
   methods: {

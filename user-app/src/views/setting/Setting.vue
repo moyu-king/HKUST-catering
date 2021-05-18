@@ -1,17 +1,17 @@
 <template>
   <div class="setting">
-    <NavBar title="设置">
-      <template #left>
-        <div class="navBar-left" @click="goBack">
-          <van-icon name="arrow-left" />
-          <span>返回</span>
-        </div>
-      </template>
-    </NavBar>
+    <NavBar title="设置" :back="true"></NavBar>
     <van-cell-group title="信息" :border="false">
       <van-cell title="个人信息" clickable @click="jump('/user-info')">
         <template #icon>
           <i class="iconfont icon-user-setting" />
+        </template>
+      </van-cell>
+    </van-cell-group>
+    <van-cell-group title="支付设置">
+      <van-cell title="支付密码" clickable to="/payment-password">
+        <template #icon>
+          <i class="iconfont icon-payment-password" />
         </template>
       </van-cell>
     </van-cell-group>
