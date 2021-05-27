@@ -8,9 +8,10 @@ export async function getOdersByDateAndPagination(params) {
   })
 }
 
-export async function getOutstandingOrders() {
+export async function getOutstandingOrders(params) {
   return axiosInstance({
     method: 'get',
     url: '/outstanding-order',
+    params
   })
 }

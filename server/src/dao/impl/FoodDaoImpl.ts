@@ -7,12 +7,10 @@ class FoodDaoImpl implements FoodDao {
     sql: string
     sqlParams: Array<any>
 
-    constructor() {
+    addFood(food: Food): Promise<boolean> {
         this.connection = DBUtil.createConnection()
         this.connection.connect()
-    }
 
-    addFood(food: Food): Promise<boolean> {
         this.sql = 'insert into food(food_id, food_name, price, type, description, image) values (?, ?, ?, ?, ?, ?)'
         this.sqlParams = [food.food_id, food.food_name, food.price, food.type, food.description, food.image]
 
@@ -27,6 +25,9 @@ class FoodDaoImpl implements FoodDao {
     }
 
     updateFood(food: Food): Promise<boolean> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = "update food set food_name = ?, price = ?, type = ? where food_id = ?"
         this.sqlParams = [food.food_name, food.price, food.type, food.food_id]
 
@@ -40,6 +41,9 @@ class FoodDaoImpl implements FoodDao {
     }
 
     queryAll(): Promise<Food[]> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'select * from food'
 
         return new Promise((resolve, reject) => {
@@ -53,6 +57,9 @@ class FoodDaoImpl implements FoodDao {
     }
 
     deleteById(food_id: string): Promise<boolean> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'delete from food where food_id = ?'
         this.sqlParams = [food_id]
 
@@ -61,12 +68,14 @@ class FoodDaoImpl implements FoodDao {
                 if (err) reject(err)
                 else resolve(true)
             })
-
             this.connection.end()
         }))
     }
 
     findById(food_id: string): Promise<Food> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         const connection = DBUtil.createConnection()
         connection.connect()
         this.sql = 'select * from food where food_id = ?'
@@ -80,6 +89,7 @@ class FoodDaoImpl implements FoodDao {
                     resolve(null)
                 }
             })
+            this.connection.end()
         })
     }
 }

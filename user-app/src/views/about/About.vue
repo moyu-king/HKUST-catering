@@ -19,11 +19,11 @@ export default {
     NavBar,
   },
   inject: ["tabBar"],
-  mounted() {
+  activated() {
     const { tabBar } = this;
     tabBar.show = true;
   },
-  destroyed() {
+  deactivated() {
     const { tabBar } = this;
     tabBar.show = false;
   },

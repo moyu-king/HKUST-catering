@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <div id="content" class="outer-container">
-      <router-view></router-view>
+      <keep-alive include="About">
+        <router-view></router-view>
+      </keep-alive>
     </div>
     <div id="tabBar" v-if="tabBar.show">
       <TabBar></TabBar>

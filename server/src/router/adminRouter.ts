@@ -47,4 +47,6 @@ router.post('/food_menu/duplicate', Auth, AdminController.addHasDuplicateFoodMen
 
 router.get('/outstanding-order', Auth, AdminController.getOutstandingOrder)
 
+router.get('/order_search', AdminController.getOrders)
+
 export default router;

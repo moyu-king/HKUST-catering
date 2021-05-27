@@ -99,6 +99,20 @@ class OrderServiceImpl implements OrderService {
             return null
         })
     }
+
+    async getOrdersByPaginationAndDate(pageStart: number, pageSize: number, startTime: number, endTime: number): Promise<Order[]> {
+        this.orderDao = new OrderDaoImpl()
+        pageStart = (pageStart - 1) * pageSize
+        return await this.orderDao.queryByPageAndDate(pageStart, pageSize, startTime, endTime).catch(e => {
+            console.log(e)
+            return null
+
+        })
+    }
+
+    async getOrdersCount(startTime: number, endTime: number): Promise<number | boolean> {
+        return await this.orderDao.queryCountByDate(startTime, endTime).catch(e => false)
+    }
 }
 
 export default OrderServiceImpl

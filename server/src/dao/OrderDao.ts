@@ -13,6 +13,10 @@ interface OrderDao {
 
     queryOutstandingOrder(): Promise<Order[]>
 
+    queryByPageAndDate(pageStart: number, pageSize: number, startTime: number, endTime: number): Promise<Order[]>
+
+    queryCountByDate(startTime: number, endTime: number):Promise<number>
+
     //order_food表
     insertOrderFood(foods: OrderFood[]): Promise<boolean>
 

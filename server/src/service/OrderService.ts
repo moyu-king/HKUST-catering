@@ -15,6 +15,10 @@ interface OrderService {
 
     getOutstandingOrder(): Promise<any[]>
 
+    getOrdersByPaginationAndDate(pageStart: number, pageSize: number, startTime: number, endTime: number): Promise<Order[]>
+
+    getOrdersCount(startTime: number, endTime: number): Promise<number | boolean>
+
 }
 
 export default OrderService

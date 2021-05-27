@@ -126,6 +126,38 @@ class OrderDaoImpl implements OderDao {
             this.connection.end()
         })
     }
+
+    queryByPageAndDate(pageStart: number, pageSize: number, startTime: number, endTime: number): Promise<Order[]> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
+        this.sql = 'select * from orders where create_time between ? and ? limit ? offset ?'
+        this.sqlParams = [startTime, endTime, pageSize, pageStart]
+
+        return new Promise((resolve, reject) => {
+            this.connection.query(this.sql, this.sqlParams, (err, result: Order[]) => {
+                if (err) reject(err)
+                else {
+                    resolve(result)
+                }
+            })
+            this.connection.end()
+        })
+    }
+
+    queryCountByDate(startTime: number, endTime: number): Promise<number> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+        this.sql = 'select count(*) count from orders where create_time between ? and ?'
+        this.sqlParams = [startTime, endTime]
+        return new Promise((resolve, reject) => {
+            this.connection.query(this.sql, this.sqlParams, (err, result: any[]) => {
+                if (err) reject(err)
+                else resolve(result[0].count)
+            })
+            this.connection.end()
+        })
+    }
 }
 
 export default OrderDaoImpl

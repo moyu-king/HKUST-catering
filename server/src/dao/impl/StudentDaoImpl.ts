@@ -7,12 +7,10 @@ class StudentDaoImpl implements StudentDao {
     sql: string
     sqlParams: any[]
 
-    constructor() {
+    findByStudentId(studentId: string): Promise<Student> {
         this.connection = DBUtil.createConnection()
         this.connection.connect()
-    }
 
-    findByStudentId(studentId: string): Promise<Student> {
         this.sql = 'select * from student where student_id = ?'
         this.sqlParams = [studentId]
 
@@ -30,6 +28,9 @@ class StudentDaoImpl implements StudentDao {
     }
 
     updateInfoByStudentId(studentId: string, name: string, phone: string, address: string): Promise<boolean> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'update student set name = ?, phone = ?, address = ? where student_id = ?'
         this.sqlParams = [name, phone, address, studentId]
 
@@ -43,6 +44,9 @@ class StudentDaoImpl implements StudentDao {
     }
 
     insertOnce(studentId: string, name: string, password: string, wallet: number): Promise<boolean> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'insert into student(student_id, name, password, wallet) values (?, ?, ?, ?)'
         this.sqlParams = [studentId, name, password, wallet]
 
@@ -56,6 +60,9 @@ class StudentDaoImpl implements StudentDao {
     }
 
     findPaymentPassByStudentId(studentId: string): Promise<string> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'select payment_password from student where student_id = ?'
         this.sqlParams = [studentId]
         return new Promise((resolve, reject) => {
@@ -68,6 +75,9 @@ class StudentDaoImpl implements StudentDao {
     }
 
     findCountByStudentId(studentId: string): Promise<number> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'select count(*) count from student where student_id = ?'
         this.sqlParams = [studentId]
         return new Promise((resolve, reject) => {
@@ -80,6 +90,9 @@ class StudentDaoImpl implements StudentDao {
     }
 
     updatePaymentPass(studentId: string, payment_password: string): Promise<boolean> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'update student set payment_password = ? where student_id = ?'
         this.sqlParams = [payment_password, studentId]
 
@@ -93,6 +106,9 @@ class StudentDaoImpl implements StudentDao {
     }
 
     updateWalletById(studentId: string, price: number): Promise<boolean> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'update student set wallet = wallet + ? where student_id = ?'
         this.sqlParams = [price, studentId]
 
@@ -106,6 +122,9 @@ class StudentDaoImpl implements StudentDao {
     }
 
     findWalletById(studentId: string): Promise<number> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'select wallet from student where student_id = ?'
         this.sqlParams = [studentId]
         return new Promise((resolve, reject) => {

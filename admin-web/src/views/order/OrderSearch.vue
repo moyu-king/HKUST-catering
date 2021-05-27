@@ -17,11 +17,8 @@
       <div slot="header">{{ date }} 订单</div>
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column prop="id" label="订单号" width="160"></el-table-column>
-        <el-table-column
-          prop="creatime"
-          label="创建时间"
-          width="100"
-        ></el-table-column>
+        <el-table-column prop="create_time" label="创建时间" width="100">
+        </el-table-column>
         <el-table-column prop="name" label="姓名" width="80"></el-table-column>
         <el-table-column
           prop="phone"
@@ -64,7 +61,8 @@
                   v-for="(detail, index) in scope.row.details"
                   :key="index"
                 >
-                  <span class="detail-name"> {{ detail.name }} </span>&nbsp;
+                  <span class="detail-name"> {{ detail.food_name }} </span
+                  >&nbsp;
                   <span class="detail-number">
                     {{ detail.number | numberFormat }}
                   </span>
@@ -90,7 +88,7 @@
       hide-on-single-page
       layout="prev, pager, next"
       :pager-count="5"
-      :total="tabelTotal"
+      :total="tableTotal"
       :page-size="pageSize"
     >
     </el-pagination>
@@ -99,6 +97,7 @@
 
 <script>
 import { getOdersByDateAndPagination } from "@/service/order";
+import { dateFormat } from "@/utils/format";
 export default {
   name: "OrderSearch",
   filters: {
@@ -116,19 +115,39 @@ export default {
   },
   data() {
     return {
-      date: "2021-03-29",
+      date: "",
       tableData: [],
-      tabelTotal: 20,
+      tableTotal: 0,
       pageSize: 10,
       pageStart: 1,
       searchDate: "",
     };
   },
   async created() {
-    const res = await this.searchOrder();
-    console.log(res);
-    this.tableData = res.orders
-    this.tabelTotal = res.orderTotal
+    const { orders, students, orderFoods, count } = (
+      await this.searchOrder()
+    ).data;
+    orders.forEach((order) => {
+      const student = students.find(
+        (item) => item.student_id === order.student_id
+      );
+      const obj = {
+        id: order.order_id,
+        create_time: dateFormat(order.create_time),
+        address: order.address,
+        type: this.transformOrderType(order.order_type),
+        name: student.name,
+        address: student.address,
+        phone: student.phone,
+        status: this.tranformOrderStatus(order.status),
+        details: orderFoods.find((item) => item.order_id === order.order_id)
+          .food,
+        total: order.price,
+      };
+      this.tableData.push(obj);
+    });
+    this.tableTotal = count;
+    console.log(count);
   },
   methods: {
     async searchOrder() {
@@ -136,22 +155,51 @@ export default {
       let date = null;
       let startTime, endTime, currentMonth;
 
-      searchDate ? date = new Date(searchDate) : date = new Date();
+      if (searchDate) {
+        date = new Date(searchDate);
+      } else {
+        const time = new Date();
+        const year = time.getFullYear();
+        const month = time.getMonth() + 1;
+
+        date = new Date(`${year}-${month}`);
+      }
+
       startTime = date.getTime();
       currentMonth = date.getMonth() + 1;
 
-      currentMonth === 12
-        ? endTime = new Date(`${date.getFullYear() + 1}-01`).getTime()
-        : endTime = new Date(`${date.getFullYear()}-${currentMonth}`).getTime();
-      
+      if (currentMonth === 12) {
+        endTime = new Date(`${date.getFullYear() + 1}-01`).getTime();
+      } else {
+        endTime = new Date(
+          `${date.getFullYear()}-${currentMonth + 1}`
+        ).getTime();
+      }
 
-      
       return await getOdersByDateAndPagination({
         startTime,
         endTime,
-        pageStart:this.pageStart,
-        pageSize: this.pageSize
+        pageStart: this.pageStart,
+        pageSize: this.pageSize,
       });
+    },
+    transformOrderType(value) {
+      switch (value) {
+        case 0:
+          return "堂食";
+        case 1:
+          return "打包";
+        case 2:
+          return "外卖";
+      }
+    },
+    tranformOrderStatus(value) {
+      switch (value) {
+        case 0:
+          return "未处理";
+        case 1:
+          return "已处理";
+      }
     },
   },
 };

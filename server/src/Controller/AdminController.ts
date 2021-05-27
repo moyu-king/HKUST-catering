@@ -274,7 +274,7 @@ class AdminController {
 
         const orderService: OrderService = new OrderServiceImpl()
         const orders: Order[] = await orderService.getOutstandingOrder()
-        
+
         if (orders) {
             const studentIds: string[] = [...new Set(orders.map(order => order.student_id))]
             const studentService: StudentService = new StudentServiceImpl()
@@ -296,6 +296,29 @@ class AdminController {
             })
 
             res.send(HttpUtil.resBody(1, 'ok', response))
+        } else {
+            res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
+        }
+    }
+
+    public static async getOrders(req: any, res: any): Promise<void> {
+        const pageStart = parseInt(req.query.pageStart)
+        const pageSize = parseInt(req.query.pageSize)
+        const startTime = parseInt(req.query.startTime)
+        const endTime = parseInt(req.query.endTime)
+
+        const orderService: OrderService = new OrderServiceImpl()
+        const orders: Order[] = await orderService.getOrdersByPaginationAndDate(pageStart, pageSize, startTime, endTime)
+
+        const studentService: StudentService = new StudentServiceImpl()
+        const studentIds: string[] = [...new Set(orders.map(order => order.student_id))]
+        const students: Student[] = await Promise.all(studentIds.map(id => studentService.getStudentInfo(id)))
+        const orderFoods: any[] = await orderService.getStudentOrderFoods(orders.map(order => order.order_id))
+
+        const count: number | boolean = await orderService.getOrdersCount(startTime, endTime)
+
+        if (orders) {
+            res.send(HttpUtil.resBody(1, 'ok', {orders, students, orderFoods, count}))
         } else {
             res.send(HttpUtil.resBody(0, ConstantUtil.serverErrMsg, ''))
         }

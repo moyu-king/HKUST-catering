@@ -1,10 +1,13 @@
 import axios from 'axios'
 import { Toast } from 'vant'
 
-// export const API_BASE_URL = "http://127.0.0.1:4396/app"
-export const API_BASE_URL = "http://192.168.201.2:4396/app"
+export const API_BASE_URL = "http://127.0.0.1:4396/app"
+// export const API_BASE_URL = "http://192.168.0.108:4396/app"
+// export const API_BASE_URL = "http://115.29.177.15:4396/app"
 
-export const RESOURCES_BASE_URL = 'http://192.168.201.2:4396/static/App'
+export const RESOURCES_BASE_URL = 'http://127.0.0.1:4396/static/App'
+// export const RESOURCES_BASE_URL = 'http://192.168.0.108:4396/static/App'
+// export const RESOURCES_BASE_URL = 'http://115.29.177.15:4396/static/App'
 
 export function axiosInstance(config) {
   const instance = axios.create({

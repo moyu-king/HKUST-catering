@@ -7,12 +7,10 @@ class AdminDaoImpl implements AdminDao {
     sql: string
     sqlParams: Array<any>
 
-    constructor() {
+    findByUsername(username: string): Promise<Admin> {
         this.connection = DBUtil.createConnection()
         this.connection.connect()
-    }
 
-    findByUsername(username: string): Promise<Admin> {
         this.sql = 'select * from admin where username = ?'
         this.sqlParams = [username]
 
@@ -38,6 +36,9 @@ class AdminDaoImpl implements AdminDao {
     }
 
     updateInfoByUsername(admin: Admin): Promise<boolean> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'update admin set shop_name = ?, alias = ?, phone = ?, address = ? where username = ?'
         this.sqlParams = [admin.shop_name, admin.alias, admin.phone, admin.address, admin.username]
 
@@ -51,6 +52,9 @@ class AdminDaoImpl implements AdminDao {
     }
 
     updatePassByUsername(username: string, password: string): Promise<boolean> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'update admin set password = ? where username = ?'
         this.sqlParams = [password, username]
 
@@ -64,6 +68,9 @@ class AdminDaoImpl implements AdminDao {
     }
 
     updateAvatarByUsername(username: string, uploadPath: string): Promise<boolean> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'update admin set avatar = ? where username = ?'
         this.sqlParams = [uploadPath, username]
 
@@ -77,12 +84,16 @@ class AdminDaoImpl implements AdminDao {
     }
 
     findFirstOnce(): Promise<Admin> {
+        this.connection = DBUtil.createConnection()
+        this.connection.connect()
+
         this.sql = 'select * from admin limit 1 offset 0'
         return new Promise((resolve, reject) => {
             this.connection.query(this.sql, this.sqlParams, (err, result: Admin[]) => {
                 if (err) reject(err)
                 else resolve(result[0])
             })
+            this.connection.end()
         })
     }
 }

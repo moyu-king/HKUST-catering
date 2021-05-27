@@ -3,8 +3,9 @@ import { Notification } from 'element-ui';
 import { baseLoading, baseLoadingClose } from '@/utils/loading'
 import router from '../router'
 
-// export const API_BASE_URL = "http://127.0.0.1:4396/HKUST"
-export const API_BASE_URL = "http://192.168.201.2:4396/HKUST"
+export const API_BASE_URL = "http://127.0.0.1:4396/HKUST"
+// export const API_BASE_URL = "http://192.168.0.108:4396/HKUST"
+// export const API_BASE_URL = "http://115.29.177.15:4396/HKUST"
 
 export function axiosInstance(config, isLoading = true) {
   let loading = null
