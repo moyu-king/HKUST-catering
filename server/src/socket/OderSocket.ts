@@ -24,6 +24,9 @@ export function oderSocket() {
 
                 const orderService: OrderService = new OrderServiceImpl()
                 const order: Order = new Order()
+
+                if (!body.order_type) return
+
                 order.order_type = body.order_type
                 order.price = body.price
                 order.discount = body.discount

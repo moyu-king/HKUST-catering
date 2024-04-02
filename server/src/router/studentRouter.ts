@@ -1,20 +1,20 @@
-import * as express from "express";
-import StudentController from "../Controller/StudentController";
-import StudentAuth from "../filter/StudentAuth";
+import * as express from 'express'
+import StudentController from '../Controller/StudentController'
+import StudentAuth from '../filter/StudentAuth'
 
-const router = express.Router();
+const router = express.Router()
 
-router.post("/login", StudentController.login);
+router.post('/login', StudentController.login)
 
-router.post("/register", StudentController.register)
+router.post('/register', StudentController.register)
 
-router.get("/user_info", StudentAuth, StudentController.getUserInfo);
+router.get('/user_info', StudentAuth, StudentController.getUserInfo)
 
-router.put("/user_info", StudentAuth, StudentController.updateUserInfo)
+router.put('/user_info', StudentAuth, StudentController.updateUserInfo)
 
-router.get("/food", StudentController.getFoods)
+router.get('/food', StudentController.getFoods)
 
-router.get("/issue-coupons", StudentController.getIssueCoupon)
+router.get('/issue-coupons', StudentController.getIssueCoupon)
 
 router.get('/student-coupons', StudentAuth, StudentController.getStudentCoupon)
 
@@ -32,4 +32,4 @@ router.put('/student-wallet', StudentAuth, StudentController.updateStudentWallet
 
 router.get('/order', StudentAuth, StudentController.getOrder)
 
-export default router;
+export default router

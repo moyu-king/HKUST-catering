@@ -1,13 +1,13 @@
-import * as express from "express";
-import AdminController from "../Controller/AdminController";
-import Auth from "../filter/Auth";
-import * as multer from "multer";
-import ConstantUtil from "../utils/ConstantUtil";
+import * as express from 'express'
+import AdminController from '../Controller/AdminController'
+import Auth from '../filter/Auth'
+import * as multer from 'multer'
+import ConstantUtil from '../utils/ConstantUtil'
 
 const avatarUpload = multer({dest: ConstantUtil.uploadAdminProfilePath})
 const foodImageUpload = multer({dest: ConstantUtil.uploadFoodImagePath})
 
-const router = express.Router();
+const router = express.Router()
 
 router.post('/login', AdminController.adminLogin)
 
@@ -49,4 +49,4 @@ router.get('/outstanding-order', Auth, AdminController.getOutstandingOrder)
 
 router.get('/order_search', AdminController.getOrders)
 
-export default router;
+export default router
